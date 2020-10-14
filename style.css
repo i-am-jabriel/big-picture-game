@@ -1,0 +1,36 @@
+canvas{
+    width:100vw;
+    height:100vh;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: -1;
+}
+body{
+    margin:0;
+    padding:0;
+    overflow:hidden;
+}
+.row{
+    display: flex;
+}
+.col, body{
+    display:flex;
+    flex-direction: column;
+}
+#shape-image{
+    width:50px;
+    height:50px;
+    filter: brightness(0.5) sepia(1) saturate(10000%) hue-rotate(0);
+}
+button{
+    cursor: pointer;
+    user-select: none;
+}
+#shape-selector{
+    align-items: center;
+    display:inline-flex;
+    align-self: center;
+    border:1px black solid;
+    padding:2em 4em;
+}
