@@ -1,7 +1,7 @@
 var browserElements = {};
 var sprites = [];
 var spriteSize = 51;
-var mc = new Shape(0,360,0.5,0);
+var mc = new Animal(0,360,0.5,0);
 
 loadElements('canvas','#shape-image','#left-shape-button','#right-shape-button','#random-shape-button',
    '#shape-selector','#play-button','body'
@@ -49,6 +49,7 @@ function imagesLoaded(){
     });
     browserElements['#play-button'].addEventListener('click',()=>{
         browserElements['#shape-selector'].style.display='none';
+        mc.createImage();
         startGame();
     });
     browserElements['canvas'].addEventListener('click',()=>paused=!paused);
@@ -72,7 +73,7 @@ Number.prototype.mod = function(n) {
 var lastUpdate;
 var gameLoop;
 function startGame(){
-    Shape.createShapes(50);
+    Animal.spawnAnimals(25);
     lastUpdate = Date.now();
     gameLoop = setInterval(tick, 0);
 }
@@ -86,9 +87,8 @@ function tick() {
 function onEnterFrame(dt){
     if(paused)return
     context.clearRect(0, 0, browserElements['canvas'].width, browserElements['canvas'].height);
-    // Shape.shapes.forEach(shape=>shape.onEnterFrame(dt));
-    let i=Shape.shapes.length;
-    while(i--)Shape.shapes[i].onEnterFrame(dt * 4);
+    let i=animals.length;
+    while(i--)animals[i].onEnterFrame(dt * 4);
 }
 
 function lerp(a, b, t) {
