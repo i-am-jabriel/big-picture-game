@@ -73,9 +73,9 @@ Number.prototype.mod = function(n) {
 var lastUpdate;
 var gameLoop;
 function startGame(){
-    Animal.spawnAnimals(25);
+    Animal.spawnAnimals(200);
     lastUpdate = Date.now();
-    gameLoop = setInterval(tick, 0);
+    gameLoop = setInterval(tick, 10);
 }
 function tick() {
     var now = Date.now();
@@ -87,10 +87,30 @@ function tick() {
 function onEnterFrame(dt){
     if(paused)return
     context.clearRect(0, 0, browserElements['canvas'].width, browserElements['canvas'].height);
-    let i=animals.length;
-    while(i--)animals[i].onEnterFrame(dt * 4);
+    let i=interactables.length;
+    while(i--)interactables[i].onEnterFrame(dt * 4);
+    camera.tryToLevelUp();
+    if(Animal.count < Animal.maxCount && prob(.1 + .5 * (1 - Animal.animalRatio)))new Animal();
 }
+var mouse = {
+    x:0,
+    y:0,
+    distance:function(p){
+        return Math.sqrt(Math.pow(this.x-p.x,2)+Math.pow(this.y-p.y,2));
+    }
+}
+var paused=false;
+browserElements['canvas'].addEventListener('mousemove',e=>{mouse.x=e.clientX-20;mouse.y=e.clientY-20});
 
+
+/*
+ 
+    Helper Functions
+
+*/
+function prob(n){
+    return Math.random() * 100 <= n;
+}
 function lerp(a, b, t) {
     return a*(1-t)+b*t;
 }
@@ -130,12 +150,30 @@ function hslToRgb(h, s, l){
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 function hslToHex(h,s,l){return rgbToHex(...hslToRgb(h,s,l))}
-var mouse = {
-    x:0,
-    y:0,
-    distance:function(p){
-        return Math.sqrt(Math.pow(this.x-p.x,2)+Math.pow(this.y-p.y,2));
+function applyOverTime(t,a,b){
+    var count = 0
+    var time = Date.now();
+    var f = setInterval(()=>{
+        var now = Date.now();
+        var dt = now - time;
+        count += dt;
+        time = now;
+        var val = Math.min(1,count/t);
+        a(val,dt);
+        if(val === 1){
+            if(b)b();
+            clearInterval(f);
+        }
+    },10);
+    return f;
+}
+class Random{
+    static range(min, max){
+        return Math.random() * (max - min) + min;
+    }
+    static intRange(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
-var paused=false;
-browserElements['canvas'].addEventListener('mousemove',e=>{mouse.x=e.clientX-20;mouse.y=e.clientY-20});
