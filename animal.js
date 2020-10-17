@@ -51,7 +51,7 @@ class Animal extends Interactable{
             this.y += -Math.sin(this.rotation.degToRad()) * this.speed * dt;
     }
     init(index){
-        this.index = index || Math.floor(Math.random() * (sprites.length));
+        this.index = index || Math.floor(Math.random() * (Animal.sprites.length));
         this.createImage();
     }
     get width(){
@@ -67,6 +67,7 @@ class Animal extends Interactable{
         Animal.count -= a.length;
         Interactable.destroyAll(a);
     }
+    static sprites = [];
     onDestroy(){
         Animal.count--;
         Interactable.onDestroy.call(this);
@@ -147,7 +148,7 @@ class Animal extends Interactable{
     }
     createImage(){
         //this.image = new document.createElement();
-        this.image = sprites[this.index];
+        this.image = Animal.sprites[this.index];
         // this.image.ctx.fillStyle = hslToHex(this.hue,this.grayscale,this.brightness);
         //  
         // this.image.ctx.fillRect(0,0,image.width,image.height);

@@ -31,4 +31,5 @@ button{
     align-self: center;
     border:1px black solid;
     padding:2em 4em;
+    user-select: none;
 }

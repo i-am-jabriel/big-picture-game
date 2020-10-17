@@ -13,11 +13,11 @@ class Interactable{
         if(this.canMove){
             this.x += -Math.cos(this.rotation.degToRad()) * this.speed * dt;
             this.y += -Math.sin(this.rotation.degToRad()) * this.speed * dt;
+            this.updateAABB();
         }
-        this.updateAABB();
         if(camera.inView(this))this.render(dt);
-        var l = tree.search(this.aabb,(a,b)=>a.id==b.id);
-        if(mc == this)console.lo g(l);
+        var l = tree.search(this.aabb);
+        if(mc == this)console.log(l);
         if(l.length)this.handleCollisions(l);
     }
     handleCollisions(){

@@ -1,14 +1,11 @@
 var browserElements = {};
-var sprites = [];
-var spriteSize = 51;
-var mc = new Animal(0,360,0.5,0);
+var mc = new Animal();
 
 loadElements('canvas','#shape-image','#left-shape-button','#right-shape-button','#random-shape-button',
    '#shape-selector','#play-button','body'
 );
 var context = browserElements['canvas'].getContext('2d');
 context.imageSmoothingEnabled = false;
-loadImages();
 
 function loadElements(){
     for(var i in arguments){
@@ -17,29 +14,45 @@ function loadElements(){
     }
 }
 
+loadImages();
+
 function loadImages(){
-    //var l = [...Array(spriteSize).keys()];
+    //var l = [...Array(Animal.spritesize).keys()];
+
     //l.shift();
-    var l = `bear.png     crocodile.png  giraffe.png  monkey.png   parrot.png   sloth.png
+    var animals = toArray(`bear.png     crocodile.png  giraffe.png  monkey.png   parrot.png   sloth.png
     buffalo.png  dog.png        goat.png     moose.png    penguin.png  snake.png
     chick.png    duck.png       gorilla.png  narwhal.png  pig.png      walrus.png
     chicken.png  elephant.png   hippo.png    owl.png      rabbit.png   whale.png
-    cow.png      frog.png       horse.png    panda.png    rhino.png    zebra.png`.replace(/\s\s+/g, ' ').split(' ');
-    var loaded=0;
-    for(var index in l){
-        var i = l[index];
-        var newImg = new Image;
-        //newImg.src = 'img/flat-foliage/sprite_00'+ (i < 10 ? '0'+i : i)+'.png';
-        newImg.src = `img/animals/${i}`;
-        newImg.onload = x => loaded == l.length-1 ? imagesLoaded() : loaded++;
-        sprites.push(newImg);
+    cow.png      frog.png       horse.png    panda.png    rhino.png    zebra.png`);
+    
+    var foods = toArray(`apple.png  broccoli.png  carrot.png  eggplant.png  leek.png      paprika.png
+    beet.png   cabbage.png   corn.png    grapes.png    mushroom.png  radish.png`);
+
+    var loaded = animals.length + foods.length;
+    var onLoad = x => !(--loaded) ? onGameLoaded() : 0;
+    function createImageForObject(url){
+        var img = new Image();
+        img.src = url;
+        img.onload = onLoad;
+        return img;
+    }
+
+    for(var i in animals){
+        Animal.sprites.push(createImageForObject(`img/animals/${animals[i]}`));
+    }
+
+    for(var i in foods){
+        Food.sprites.push(createImageForObject(`img/food/${foods[i]}`));
     }
 }
 
+function toArray(s){
+    return s.replace(/\s\s+/g, ' ').split(' ');
+}
 
-function imagesLoaded(){
-    spriteSize = sprites.length;
-    browserElements['#shape-image'].src = sprites[0].src;
+function onGameLoaded(){
+    browserElements['#shape-image'].src = Animal.sprites[0].src;
     browserElements['#left-shape-button'].addEventListener('click',x=>updateShapeImageIndex(-1));
     browserElements['#right-shape-button'].addEventListener('click',x=>updateShapeImageIndex(1));
     browserElements['#random-shape-button'].addEventListener('click',()=>{
@@ -56,9 +69,9 @@ function imagesLoaded(){
 }
 function updateShapeImageIndex(i=0){
     console.log('changing index by',i);
-    mc.index=(mc.index+i).mod(spriteSize);
+    mc.index=(mc.index+i).mod(Animal.sprites.length);
     console.log(mc.index);
-    browserElements['#shape-image'].src=sprites[mc.index].src;
+    browserElements['#shape-image'].src=Animal.sprites[mc.index].src;
     mc.createImage();
 }
 function updateShapeImageStyle(){
