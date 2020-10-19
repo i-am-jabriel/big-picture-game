@@ -86,7 +86,9 @@ Number.prototype.mod = function(n) {
 var lastUpdate;
 var gameLoop;
 function startGame(){
-    Animal.spawnAnimals(200);
+    mc.insertIntoTree();
+    Animal.spawnAnimals(3);
+    Food.spawnFood(5);
     lastUpdate = Date.now();
     gameLoop = setInterval(tick, 10);
 }
@@ -103,7 +105,8 @@ function onEnterFrame(dt){
     let i=interactables.length;
     while(i--)interactables[i].onEnterFrame(dt * 4);
     camera.tryToLevelUp();
-    if(Animal.count < Animal.maxCount && prob(.1 + .5 * (1 - Animal.animalRatio)))new Animal();
+    if(Animal.count < Animal.maxCount && prob(.1 + .5 * (1 - Animal.animalRatio)))new Animal().insertIntoTree();
+    if(prob(.8))new Food().insertIntoTree();
 }
 var mouse = {
     x:0,
@@ -113,7 +116,7 @@ var mouse = {
     }
 }
 var paused=false;
-browserElements['canvas'].addEventListener('mousemove',e=>{mouse.x=e.clientX-20;mouse.y=e.clientY-20});
+browserElements['canvas'].addEventListener('mousemove',e=>{mouse.x=e.clientX-mc.size*.5;mouse.y=e.clientY-mc.size*.5});
 
 
 /*

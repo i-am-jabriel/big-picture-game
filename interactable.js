@@ -2,23 +2,27 @@ var interactables = [];
 class Interactable{
     constructor(){
         this.id = interactables.push(this) - 1;
-        tree.insert(this.aabb = {id:this.id});
         this.bounce = null;
         this.speed = 0;
         this.rotation = 0;
         this.x = spawn.x;
         this.y = spawn.y;
+        this.size =     1;
     }
     onEnterFrame(dt){
         if(this.canMove){
             this.x += -Math.cos(this.rotation.degToRad()) * this.speed * dt;
             this.y += -Math.sin(this.rotation.degToRad()) * this.speed * dt;
-            this.updateAABB();
         }
         if(camera.inView(this))this.render(dt);
-        var l = tree.search(this.aabb);
-        if(mc == this)console.log(l);
+        var l = tree.search(this).filter(x=>this.canTarget(x));
         if(l.length)this.handleCollisions(l);
+    }
+    insertIntoTree(){
+        tree.insert(this);
+    }
+    static bulkInsertIntoTree(arr){
+        tree.load(arr);
     }
     handleCollisions(){
     }
@@ -42,21 +46,14 @@ class Interactable{
     onDestroy(){
         tree.remove(this);
     }
-    /*get x(){return this._x;}
-    set x(value){
-        this._x = value;
-        this.updateAABB();
+    canTarget(x){
+        return this != x;
     }
-    get y(){return this._y;}
-    set y(value){
-        this._x = value;
-        this.updateAABB();
-    }*/
     get width(){
-        return 40;
+        return pps * this.size;
     }
     get height(){
-        return 40;
+        return pps * this.size;
     }
     get randomX(){
         return Math.random() * camera.width * .9 - camera.width * .45;
@@ -82,19 +79,11 @@ class Interactable{
     get bounceHeight(){
         return this.bounce ? lerp(this.bounce.min,this.bounce.max,Math.sin(this.bounce.count)) : 1;
     }
+    get mc(){return this == mc;}
     get minX(){return this.x;}
     get minY(){return this.y;}
     get maxX(){return this.right;}
     get maxY(){return this.bottom;}
-    updateAABB(){
-        Object.assign(this.aabb,{
-            minX: this.x,
-            minY: this.y,
-            maxX: this.right,
-            maxY: this.bottom,
-        });
-    }
 }
 
-const tree = new rbush(12);
-console.log(tree.all());
+const tree = new rbush(9);

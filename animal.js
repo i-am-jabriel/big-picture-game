@@ -47,18 +47,10 @@ class Animal extends Interactable{
                 this.rotation = lerpAngle(this.rotation,targetRot,0.2).mod(360);            
             }else this.speed = 0;
         }
-            this.x += -Math.cos(this.rotation.degToRad()) * this.speed * dt;
-            this.y += -Math.sin(this.rotation.degToRad()) * this.speed * dt;
     }
     init(index){
         this.index = index || Math.floor(Math.random() * (Animal.sprites.length));
         this.createImage();
-    }
-    get width(){
-        return this.size * pps;
-    }
-    get height(){
-        return this.size * pps;
     }
     get canMove(){
         return !this.eating && !camera.levelingUp && !paused;
@@ -70,7 +62,7 @@ class Animal extends Interactable{
     static sprites = [];
     onDestroy(){
         Animal.count--;
-        Interactable.onDestroy.call(this);
+        Interactable.prototype.onDestroy.call(this);
     }
     
     
@@ -125,17 +117,30 @@ class Animal extends Interactable{
         return true;
     }*/
     handleCollisions(colliders){
-        if(colliders.length)console.log(colliders);
         var i  = colliders.length;
+        var eaten = [];
+        if(mc)
         while(i--){
             var collider = colliders[i];
-            if(typeof collider != 'Animal'||collider == mc)continue;
-            var eater = this.size > collider.size ? this : collider;
-            var eaten  = this.size > collider.size ? collider : this;
-            if(eaten==mc)return false;
-            var eatingDuration = 500;
-            var gains = (Math.random() *.5 +.5) / eatingDuration;
-            eater.colliders.push(eaten);
+            var eater, food, growthMod = 1, eatDurationMod = 1;
+            switch(collider.constructor.name){
+                case 'Food':
+                    food = collider;
+                    eater = this;
+                    eatDurationMod = .8;
+                    growthMod = .6;
+                    break;
+                case 'Animal':
+                    eater = this.size >= collider.size ? this : collider;
+                    food  = this.size >= collider.size ? collider : this;
+                    growthMod = .5;
+                    eatDurationMod = 2.5;
+                    break;
+            }
+            if(food.mc || eater == food)continue;
+            console.log(eater,food);
+            var eatingDuration = 500 * eatDurationMod;
+            var gains = growthMod * (Math.random() *.3 +.3) * food.size / eatingDuration;
             eater.bounce.rate = eater.bounce.originalRate * .25;
             var f = applyOverTime(eatingDuration, (a,dt)=>eater.size += dt * gains,()=>{
                 if(eater.eating == f){
@@ -144,7 +149,9 @@ class Animal extends Interactable{
                 }
             });
             eater.eating = f;
+            eaten.push(food);
         }
+        Interactable.destroyAll(eaten);
     }
     createImage(){
         //this.image = new document.createElement();
@@ -162,7 +169,9 @@ class Animal extends Interactable{
     }
     setPos(x,y){this.x=x;this.y=y;}
     static spawnAnimals(I=40){
-        for(var i=0;i<I;i++)new Animal();
+        var l = [];
+        for(var i=0;i<I;i++)l.push(new Animal());
+        tree.load(l);
     }
     static count = 0;
     static maxCount = 30;

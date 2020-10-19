@@ -35,18 +35,15 @@ class Camera{
         if(mc.size > 6 && !this.levelingUp){
             this.levelingUp = true;
             setTimeout(()=>{
-
-                console.log('level up');
                 var shrinkTime = 2000;
                 applyOverTime(shrinkTime, (a,dt)=>{
-                    var i=animals.length;
+                    var i=interactables.length;
                     var shrink = dt*5/shrinkTime;
                     var destroy = [];
                     while(i--){
-                        if((animals[i].size -= shrink) < 0.1)destroy.push(animals[i]);
+                        if((interactables[i].size -= shrink) < 0.1)destroy.push(interactables[i]);
                     }
-                    if(destroy.length>0) Animal.destroyAll(destroy);
-                    console.log('shrinking by',shrink,mc.size);
+                    if(destroy.length>0) Interactable.destroyAll(destroy);
                     this.scale += shrink;
                 },x=>this.levelingUp=false);
             },500)
