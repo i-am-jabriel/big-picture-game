@@ -28,7 +28,7 @@ class Interactable{
     }
     render(dt){
         if(this.bounce)this.bounce.count = ((this.bounce.count + (dt / (1000 * this.bounce.rate)))) % (Math.PI);
-        context.drawImage(this.image, this.x, this.y, this.width, this.height * this.bounceHeight);
+        context.drawImage(this.image, this.x - this.width * .5, this.y - this.height *.5, this.width, this.height * this.bounceHeight);
     }
     destroy(){
         this.onDestroy();
@@ -44,10 +44,17 @@ class Interactable{
         while(i--)interactables[i].id = i;
     }
     onDestroy(){
+        this.id = null;
         tree.remove(this);
     }
     canTarget(x){
         return this != x;
+    }
+    distance(obj){
+        return Math.sqrt(Math.pow(this.x-obj.x,2)+Math.pow(this.y-obj.y,2));
+    }
+    rotationTowards(obj){
+        return Math.atan2(this.y-obj.y,this.x-obj.x).radToDeg();
     }
     get width(){
         return pps * this.size;
@@ -62,28 +69,28 @@ class Interactable{
         return Math.random() * camera.height * .9 - camera.height * .45;
     }
     get left(){
-        return this.x;
+        return this.x - this.width * .5;
     }
     get top(){
-        return this.y;
+        return this.y - this.height * .5;
     }
     get bottom(){
-        return this.y + this.height;
+        return this.y + this.height * .5;
     }
     get right(){
-        return this.x + this.width;
+        return this.x + this.width * .5;
     }
     get canMove(){
         return false;
     }
     get bounceHeight(){
-        return this.bounce ? lerp(this.bounce.min,this.bounce.max,Math.sin(this.bounce.count)) : 1;
+        return this.bounce ? lerp(this.bounce.range.min,this.bounce.range.max,Math.sin(this.bounce.count)) : 1;
     }
     get mc(){return this == mc;}
-    get minX(){return this.x;}
-    get minY(){return this.y;}
+    get minX(){return this.left;}
+    get minY(){return this.top;}
     get maxX(){return this.right;}
     get maxY(){return this.bottom;}
 }
 
-const tree = new rbush(9);
+const tree = new rbush(12);

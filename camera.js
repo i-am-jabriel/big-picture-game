@@ -32,13 +32,14 @@ class Camera{
         spawn._y=this.height*.48;
     }
     tryToLevelUp(){
-        if(mc.size > 6 && !this.levelingUp){
+        var readyToLevelUp = Math.max(...interactables.map(x=>x.size))>=10;
+        if(readyToLevelUp && !this.levelingUp){
             this.levelingUp = true;
             setTimeout(()=>{
                 var shrinkTime = 2000;
                 applyOverTime(shrinkTime, (a,dt)=>{
                     var i=interactables.length;
-                    var shrink = dt*5/shrinkTime;
+                    var shrink = dt * 10 / shrinkTime;
                     var destroy = [];
                     while(i--){
                         if((interactables[i].size -= shrink) < 0.1)destroy.push(interactables[i]);

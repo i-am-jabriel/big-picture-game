@@ -8,7 +8,7 @@ Number.prototype.radToDeg =  function() {
   };
 var pps =  40; //pixelpersize
 var minDistance = 15;
-var maxSpeed = 0.1;
+var maxSpeed = 0.05;
 class Animal extends Interactable{
     constructor(index = null){
         Animal.count++;
@@ -21,21 +21,24 @@ class Animal extends Interactable{
         this.bounce = {
             rate: 1.7,
             count:0,
-            min:.85,
-            max:1.15
-        }
+            // min:.85,
+            // max:1.15
+            range:new Range(.85,1.15)
+        };
         this.bounce.originalRate = this.bounce.rate;
+        this.bounce.originalRange = this.bounce.range.clone();
         if(mc == this){
             this.size = 1;
-            this.speed = 0.1;
+            this.speed = 0.05;
         }
         else{
-            this.size = mc.size * (Math.random()*.4+.4);
+            this.size = Math.min(mc.size * Random.range(.2,1.5),6);
             if(camera.levelingUp) this.size *= 2;
             this.x += this.randomX;
             this.y += this.randomY;
             this.rotation = Random.range(0,360);
-            this.speed = 0.01;
+            this.speed = 0.05;
+            this.brain = new Brain(this);
         }
     }
     onEnterFrame(dt){
@@ -46,7 +49,7 @@ class Animal extends Interactable{
                 var targetRot = Math.atan2(this.y - mouse.y, this.x - mouse.x).radToDeg();
                 this.rotation = lerpAngle(this.rotation,targetRot,0.2).mod(360);            
             }else this.speed = 0;
-        }
+        } else this.brain.onEnterFrame(dt);
     }
     init(index){
         this.index = index || Math.floor(Math.random() * (Animal.sprites.length));
@@ -64,31 +67,6 @@ class Animal extends Interactable{
         Animal.count--;
         Interactable.prototype.onDestroy.call(this);
     }
-    
-    
-        /*if(camera.inView(this))this.render(dt);
-        else if(mc != this){
-            this.rotation += Math.random() * 10;
-            var targetRot = Math.atan2(this.y-spawn.y + camera.y, this.x-spawn.x + camera.x).radToDeg();
-            this.rotation = lerpAngle(this.rotation,targetRot,0.8);   
-        }
-        for(var i=this.id+1;i<animals.length;i++){
-            this.checkCollision(animals[i]);
-        }
-        while(this.colliders.length){
-            this.colliders.pop().destroy();
-        }*/
-    // }
-    // render(dt){
-        // context.filter = this.getFilter();
-        //context.save();
-        //context.translate(camera.width*.5,camera.height*.5);
-        //context.rotate(this.rotation.degToRad());
-        //context.fillStyle = hslToHex(this.hue,this.grayscale,this.brightness);
-        //this.bounce.count = ((this.bounce.count + (dt / (1000 * this.bounce.rate)))) % (Math.PI);
-        // context.drawImage(this.image,this.x,this.y,this.size*pps,this.size*pps*lerp(this.bounce.min,this.bounce.max,Math.sin(this.bounce.count)));
-        //context.restore();
-    // }
     /*checkCollision(shape){
         if(shape==this)return false;
         var a,b,c,d;
@@ -100,26 +78,11 @@ class Animal extends Interactable{
                 //console.log(a,b,c,d);
                 return false;
         }
-        var eater = this.size > shape.size ? this : shape;
-        var eaten  = this.size > shape.size ? shape : this;
-        if(eaten==mc)return false;
-        var eatingDuration = 500;
-        var gains = (Math.random() *.5 +.5) / eatingDuration;
-        eater.colliders.push(eaten);
-        eater.bounce.rate = eater.bounce.originalRate * .25;
-        var f = applyOverTime(eatingDuration, (a,dt)=>eater.size += dt * gains,()=>{
-            if(eater.eating == f){
-                eater.eating = null;
-                eater.bounce.rate = eater.bounce.originalRate;
-            }
-        });
-        eater.eating = f;
-        return true;
     }*/
     handleCollisions(colliders){
+        if(this.eating)return;
         var i  = colliders.length;
         var eaten = [];
-        if(mc)
         while(i--){
             var collider = colliders[i];
             var eater, food, growthMod = 1, eatDurationMod = 1;
@@ -133,39 +96,30 @@ class Animal extends Interactable{
                 case 'Animal':
                     eater = this.size >= collider.size ? this : collider;
                     food  = this.size >= collider.size ? collider : this;
-                    growthMod = .5;
-                    eatDurationMod = 2.5;
+                    growthMod = 1.3;
+                    eatDurationMod = 1.8;
                     break;
             }
             if(food.mc || eater == food)continue;
-            console.log(eater,food);
+            eaten.push(food);
+            // console.log(eater,food);
             var eatingDuration = 500 * eatDurationMod;
-            var gains = growthMod * (Math.random() *.3 +.3) * food.size / eatingDuration;
-            eater.bounce.rate = eater.bounce.originalRate * .25;
+            var gains = Math.min(2,growthMod * (Math.random() *.3 +.3) * food.size) / eatingDuration;
+            eater.bounce.rate = eater.bounce.originalRate * .2;
+            eater.bounce.range.max *= 1.1;
             var f = applyOverTime(eatingDuration, (a,dt)=>eater.size += dt * gains,()=>{
-                if(eater.eating == f){
+                if(eater.eating === f){
                     eater.eating = null;
                     eater.bounce.rate = eater.bounce.originalRate;
+                    eater.bounce.range.max =  eater.bounce.originalRange.max;
                 }
             });
             eater.eating = f;
-            eaten.push(food);
         }
         Interactable.destroyAll(eaten);
     }
     createImage(){
-        //this.image = new document.createElement();
         this.image = Animal.sprites[this.index];
-        // this.image.ctx.fillStyle = hslToHex(this.hue,this.grayscale,this.brightness);
-        //  
-        // this.image.ctx.fillRect(0,0,image.width,image.height);
-        // this.image.ctx.globalCompositeOperation = "source-over";
-    }
-    getFilter(){
-        return `brightness(${this.brightness}) sepia(1) saturate(10000%) hue-rotate(${this.hue}deg) grayscale(${this.grayscale})`;
-    }
-    getTransform(){
-        return `rotate(${this.rotation}deg)`;
     }
     setPos(x,y){this.x=x;this.y=y;}
     static spawnAnimals(I=40){

@@ -28,10 +28,12 @@
     * [✔] Always slowly moving forwards
     * [✔] OnCollision Either bumps if similar sized or is consumed by the larger one
     * [] Has a cache of turbo speed that can be used anytime that refills by eating smaller <s>shapes</s> animals
-    * [] AI is not random. Small <s>shapes</s> animals will run from big ones big ones will chase small ones, but wont tunnel too hard on hard to catch ones
-* [] Powerup  Class
-    * [] Picked up by <s>shapes</s> animals to give them temporary buffs
-    * [] Gluttony Causes increased growth rate but causes <s>shapes</s> animals to stick to you
-    * [] Wrath allows you to cut bigger <s>shapes</s> animals in half
-    * [] Envy gives you movement speed buffs running towards smaller and away from bigger
-    * [] Envy gives you movement speed buffs running towards smaller and away from bigger
+    * [✔] AI is not random. Small <s>shapes</s> animals will run from big ones big ones will chase smaller animals.
+* [✔] Food Class
+    * [✔] Spawn Food randomly
+    * [✔] Are consumed more quickly but give less size
+    * [✔] Enemy AI will prioritize food / but not over running away.
+* [ ] Stretch Goals
+    * [✔] Implement a r-tree to significantly bolster speed of calculations of collisions
+    * [] Create my own version of a r-tree
+    * [] Implement a soundtrack
