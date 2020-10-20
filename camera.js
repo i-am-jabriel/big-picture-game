@@ -32,7 +32,7 @@ class Camera{
         spawn._y=this.height*.48;
     }
     tryToLevelUp(){
-        var readyToLevelUp = Math.max(...interactables.map(x=>x.size))>=10;
+        var readyToLevelUp = Math.max(...interactables.map(x=>x.size))>=12;
         if(readyToLevelUp && !this.levelingUp){
             this.levelingUp = true;
             setTimeout(()=>{

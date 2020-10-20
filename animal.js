@@ -9,7 +9,6 @@ Number.prototype.radToDeg =  function() {
 var pps =  40; //pixelpersize
 var minDistance = 15;
 var maxSpeed = 0.05;
-var bounceSize = 2;
 var turboEnergyCost = .01;
 var ambientEnergyGain = .001;
 class Animal extends Interactable{
@@ -21,6 +20,7 @@ class Animal extends Interactable{
         
         this.init(...arguments);
         this.speed = 0.01;
+        this.alive = true;
         this.bounce = {
             rate: 1.7,
             count:0,
@@ -41,7 +41,7 @@ class Animal extends Interactable{
             this.turbo = false;
         }
         else{
-            this.size = Math.min(mc.size * Random.range(.3,1.3),4);
+            this.size = (Random.range(0.001,2)*Math.max(mc.size,.5)).clamp(.1,1.5 + Math.pow(mc.size+1,0.5));
             if(camera.levelingUp) this.size *= 2;
             this.x += this.randomX;
             this.y += this.randomY;
@@ -83,6 +83,19 @@ class Animal extends Interactable{
         Animal.count--;
         if(this.brain)this.brain = null;
         Interactable.prototype.onDestroy.call(this);
+        this.alive = false;
+        if(this.mc){
+            this.alive = true;
+            setTimeout(3000,this.alive=false);
+            browserElements['body'].className = 'gray';
+            browserElements['#game-over'].className='visible';
+            browserElements['#hud'].className='hidden';
+            browserElements['#score'].innerText = 'Score: '+Math.round(camera.scale+this.size);
+            this.size = 2;
+        }
+    }
+    canEat(animal){
+        return this.size - 1.5 > animal.size || this.size/animal.size > 2;
     }
     /*checkCollision(shape){
         if(shape==this)return false;
@@ -117,12 +130,12 @@ class Animal extends Interactable{
                     eatDurationMod = 1.8;
                     break;
             }
-            if(eater.size - bounceSize < food.size && food.constructor.name == 'Animal'){
+            if(food.constructor.name == 'Animal' && !eater.canEat(food)){
                 eater.bounceAwayFrom(food);
                 food.bounceAwayFrom(eater);
                 continue;
             }
-            if(food.mc || eater == food)continue;
+            if(eater == food)continue;
             eaten.push(food);
             // console.log(eater,food);
             var eatingDuration = 500 * eatDurationMod;

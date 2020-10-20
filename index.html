@@ -2,52 +2,52 @@
 <html>
     <head>
         <title>Big Picture</title>
+        <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Roboto&display=swap" rel="stylesheet">
         <link rel='stylesheet' href="style.css"/>   
     </head>
     <body>
-        <div id='shape-selector' class='col'>
-            <h1>Big Picture.</h1>
-            <div class='row'>
-                <p>Choose a Animal:</p>
+        <div class='col main-container'>
+            <div id='game-over'>
+                <p>Game Over</p>
+                <div id='score'>Score: 0</div>
             </div>
-            <div class='row'>
-                <button id='left-shape-button'>◀</button>
-                <img id='shape-image' />
-                <button id='right-shape-button'>▶</button>
-                
+
+            <div id='shape-selector' class='col'>
+                <h1>Big Picture.</h1>
+                <div class='row'>
+                    <p>Choose a Animal:</p>
+                </div>
+
+                <div class='row'>
+                    <button id='left-shape-button'>◀</button>
+                    <img id='shape-image' />
+                    <button id='right-shape-button'>▶</button>
+                    
+                </div>
+                <div class='row'>
+                    <button id='random-shape-button'>🎲</button>
+                    <button id='play-button'>Play!</button>
+                </div>
             </div>
-            <!-- <div class='row'>
-                Hue:<input type="range" min="0" max="360" value="0" class="slider" id="shape-hue-slider">
+            <div>
+                <div id="hud">                 
+                    <input type="checkbox" id="water"/>
+                    <label for="water">
+                        <div id="energy-bar"></div>
+                    </label>
+                    <span>Energy</span>
+                    <span id="energy-text">100%</span>
+                </div>
             </div>
-            <div class='row'>
-                Brightness:<input type="range" min="0" max="100" value="50" class="slider" id="shape-brightness-slider">
-            </div>
-            <div class='row'>
-                Grayscale:<input type="range" min="0" max="100" value="0" class="slider" id="shape-grayscale-slider">
-            </div> -->
-            <div class='row'>
-                <button id='random-shape-button'>🎲</button>
-                <button id='play-button'>Play!</button>
-            </div>
+            <canvas></canvas>
+            <script src='https://unpkg.com/rbush@2.0.1/rbush.min.js'></script>
+            <script src='helper.js'></script>
+            <script src='interactable.js'></script>
+            <script src='food.js'></script>
+            <script src='camera.js'></script>
+            <script src='brain.js'></script>
+            <script src='animal.js'></script>
+            <script src='main.js'></script>
         </div>
-        <div>
-            <div id="hud">                 
-                <input type="checkbox" id="water"/>
-                <label for="water">
-                    <div id="energy-bar"></div>
-                </label>
-                <span>Energy</span>
-                <span id="energy-text">100%</span>
-            </div>
-        </div>
-        <canvas></canvas>
-        <script src='https://unpkg.com/rbush@2.0.1/rbush.min.js'></script>
-        <script src='helper.js'></script>
-        <script src='interactable.js'></script>
-        <script src='food.js'></script>
-        <script src='camera.js'></script>
-        <script src='brain.js'></script>
-        <script src='animal.js'></script>
-        <script src='main.js'></script>
-    </body>
+        </body>
 </html>

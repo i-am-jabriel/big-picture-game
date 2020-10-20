@@ -45,8 +45,17 @@
     * [✔] Will path towards food
     * [✔] Prioritzes living over everything else
 
+* [ ] Player Class
+    * [✔] Players character follows mouse around
+    * [✔] Player can click the mouse to use turbo
+    * [✔] Player can pause the game with spacebar
+    * [✔] Player can restart the game with enter
+    * [✔] Player can die
+    * [] Player sees a gameover screen remindind them that they can restart or can watch AI just eat.
+
 * [ ] Stretch Goals
     * [✔] Implement a r-tree to significantly bolster speed of calculations of collisions
-    * [] Create my own version of a r-tree
-    * [] Implement a soundtrack
-    * [] Make it multiplayer / filled with bots when no ones online
+    * [ ] Create my own version of a r-tree
+    * [ ] Implement a soundtrack and various other sound effects
+    * [ ] Add a dynamic moving background
+    * [ ] Make it multiplayer / filled with bots when no ones online

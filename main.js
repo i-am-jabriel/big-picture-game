@@ -2,7 +2,7 @@ var browserElements = {};
 var mc = new Animal();
 
 loadElements('canvas','#shape-image','#left-shape-button','#right-shape-button','#random-shape-button',
-   '#shape-selector','#play-button','body','#energy-bar','#energy-text'
+   '#shape-selector','#play-button','body','#energy-bar','#energy-text','#game-over','#score','#hud'
 );
 var context = browserElements['canvas'].getContext('2d');
 context.imageSmoothingEnabled = false;
@@ -65,19 +65,33 @@ function onGameLoaded(){
         mc.createImage();
         startGame();
     });
-    browserElements['canvas'].addEventListener('mousedown',()=>mc.turbo=true);
-    browserElements['canvas'].addEventListener('mouseup',()=>mc.turbo=false);
+    window.addEventListener('click',()=>{
+        if(!mc.alive){
+            var {body, '#game-over':gameOver} = browserElements;
+            var b = '', g = '';
+            if(body.className === ''){
+                b = 'gray';
+                g = 'visible';
+            }
+            body.className = b;
+            gameOver.className = g;
+        }
+    });
+    window.addEventListener('mousedown',()=>mc.turbo=true);
+    window.addEventListener('mouseup',()=>mc.turbo=false);
     window.addEventListener('keyup',e=>{
         let key =e.keyCode || e.charCode;
         if(key==13)restartGame();
         if(key==32)paused =! paused;
-    })
+    });
+    window.addEventListener('mousemove',e=>{
+        mouse.x=e.clientX-mc.size*.5;
+        mouse.y=e.clientY-mc.size*.5
+    });
 
 }
 function updateShapeImageIndex(i=0){
-    console.log('changing index by',i);
     mc.index=(mc.index+i).mod(Animal.sprites.length);
-    console.log(mc.index);
     browserElements['#shape-image'].src=Animal.sprites[mc.index].src;
     mc.createImage();
 }
@@ -110,7 +124,11 @@ function restartGame(){
     mc.y = spawn.y;
     mc.eating = null;
     mc.bumped = null;
+    mc.alive = true;
     mc.energy.value = 100;
+    browserElements['body'].className = '';
+    browserElements['#game-over'].className = '';
+    browserElements['#hud'].className = '';
 }
 function tick() {
     var now = Date.now();
@@ -125,8 +143,8 @@ function onEnterFrame(dt){
     let i=interactables.length;
     while(i--)interactables[i].onEnterFrame(dt * 4);
     camera.tryToLevelUp();
-    if(Animal.count < Animal.maxCount && prob(.1 + .5 * (1 - Animal.animalRatio)))new Animal().insertIntoTree();
-    if(prob(1.2))new Food().insertIntoTree();
+    if(Animal.count < Animal.maxCount && prob(.05 + .25 * (1 - Animal.animalRatio)))new Animal().insertIntoTree();
+    if(prob(1.3))new Food().insertIntoTree();
 }
 var mouse = {
     x:0,
@@ -136,4 +154,3 @@ var mouse = {
     }
 }
 var paused=false;
-browserElements['canvas'].addEventListener('mousemove',e=>{mouse.x=e.clientX-mc.size*.5;mouse.y=e.clientY-mc.size*.5});
