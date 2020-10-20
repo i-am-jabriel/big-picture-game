@@ -11,12 +11,14 @@
     * [✔] Create baseline html
     * [✔] Create folders to pull images of <s>shapes</s> animals from
     * [✔] Create deailed readme file for all to marvel at
+
 * [✔] <s>Shape</s> Animal Selector Screen
     * [✔] Load images
     * [✔] Use buttons to select different types of <s>shapes</s> animals
     * [✔] Using slider to change paramaters of the <s>shape</s> animals
     * [✔] Create button that randomizes all settings
     * [✔] Add Play button
+
 * [✔] Gameplay Loop
     * [✔] Populate the world with other <s>shapes</s> animals that are larger and smaller than you
     * [✔] Make all the <s>shapes</s> animals move in various directions
@@ -24,16 +26,27 @@
     * [✔] Have the camera follow the mc
     * [✔] Handle collisions of <s>shapes</s> animals, if similar size bounce otherwise smaller <s>shapes</s> animals get eaten by larger ones
     * [✔] Level up which allows you to see more of the bigger picture and also reverts you to being a small fish in a big pond
-* [] <s>shape</s> Animal Class
+
+* [✔] <s>shape</s> Animal Class
     * [✔] Always slowly moving forwards
     * [✔] OnCollision Either bumps if similar sized or is consumed by the larger one
-    * [] Has a cache of turbo speed that can be used anytime that refills by eating smaller <s>shapes</s> animals
-    * [✔] AI is not random. Small <s>shapes</s> animals will run from big ones big ones will chase smaller animals.
+    * [✔] Has a cache of energy that can consumed for turbo speed used anytime that refills pasivly or by eating food
+
 * [✔] Food Class
-    * [✔] Spawn Food randomly
+    * [✔] Spawn Food randomly in random positions
     * [✔] Are consumed more quickly but give less size
     * [✔] Enemy AI will prioritize food / but not over running away.
+
+* [✔] Animal AI
+    * [✔] Animals have a brain
+    * [✔] Animals will surveoy the land and nearby nodes to decide a plan of attack
+    * [✔] Will run from bigger enemies
+    * [✔] Will chase smaller / more vulenerable enemies.
+    * [✔] Will path towards food
+    * [✔] Prioritzes living over everything else
+
 * [ ] Stretch Goals
     * [✔] Implement a r-tree to significantly bolster speed of calculations of collisions
     * [] Create my own version of a r-tree
     * [] Implement a soundtrack
+    * [] Make it multiplayer / filled with bots when no ones online

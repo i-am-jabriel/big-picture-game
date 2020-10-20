@@ -5,6 +5,14 @@
     Helper Functions
 
 */
+Number.prototype.clamp = function(a, b){
+    let big = b, small = a;
+    if(a > b){
+        big = a;
+        small = b;
+    }
+    return Math.min(big,Math.max(this,small));
+}
 function prob(n){
     return Math.random() * 100 <= n;
 }
@@ -80,9 +88,11 @@ class Random{
 }
 
 class Range{
-    constructor(min=0,max=1){
+    constructor(min=0,max=1,value){
         this.min = min;
         this.max = max;
+        this.onValue = [];
+        this._value = value;
     }
     range(){
         return Random.range(this.min,this.max);
@@ -90,7 +100,18 @@ class Range{
     ratio(){
         return this.min/this.max;
     }
+    get vMax(){
+        return this._value /this.max;
+    }
     clone(){
         return Object.assign({},this);
+    }
+    get value(){
+        return this._value;
+    }
+    set value(value){
+        this._value = value.clamp(this.min,this.max);
+        var i = this.onValue.length;
+        while(i--) this.onValue[i]();
     }
 }

@@ -39,10 +39,10 @@ class Camera{
                 var shrinkTime = 2000;
                 applyOverTime(shrinkTime, (a,dt)=>{
                     var i=interactables.length;
-                    var shrink = dt * 10 / shrinkTime;
+                    var shrink = dt * 2 / shrinkTime;
                     var destroy = [];
                     while(i--){
-                        if((interactables[i].size -= shrink) < 0.1)destroy.push(interactables[i]);
+                        if((interactables[i].size -= Math.max(shrink,interactables[i].size*.01)) < 0.1)destroy.push(interactables[i]);
                     }
                     if(destroy.length>0) Interactable.destroyAll(destroy);
                     this.scale += shrink;

@@ -2,7 +2,7 @@ var browserElements = {};
 var mc = new Animal();
 
 loadElements('canvas','#shape-image','#left-shape-button','#right-shape-button','#random-shape-button',
-   '#shape-selector','#play-button','body'
+   '#shape-selector','#play-button','body','#energy-bar','#energy-text'
 );
 var context = browserElements['canvas'].getContext('2d');
 context.imageSmoothingEnabled = false;
@@ -65,7 +65,14 @@ function onGameLoaded(){
         mc.createImage();
         startGame();
     });
-    browserElements['canvas'].addEventListener('click',()=>paused=!paused);
+    browserElements['canvas'].addEventListener('mousedown',()=>mc.turbo=true);
+    browserElements['canvas'].addEventListener('mouseup',()=>mc.turbo=false);
+    window.addEventListener('keyup',e=>{
+        let key =e.keyCode || e.charCode;
+        if(key==13)restartGame();
+        if(key==32)paused =! paused;
+    })
+
 }
 function updateShapeImageIndex(i=0){
     console.log('changing index by',i);
@@ -86,11 +93,24 @@ Number.prototype.mod = function(n) {
 var lastUpdate;
 var gameLoop;
 function startGame(){
-    mc.insertIntoTree();
-    Animal.spawnAnimals(1);
-    Food.spawnFood(5);
+    restartGame();
     lastUpdate = Date.now();
     gameLoop = setInterval(tick, 10);
+}
+function restartGame(){
+    Interactable.clear();
+    camera.scale = 0;
+    Animal.animalCount = 0;
+    Animal.spawnAnimals(1);
+    Food.spawnFood(5);
+    mc.insertIntoTree();
+    interactables.push(mc);
+    mc.size = 1;
+    mc.x = spawn.x;
+    mc.y = spawn.y;
+    mc.eating = null;
+    mc.bumped = null;
+    mc.energy.value = 100;
 }
 function tick() {
     var now = Date.now();
@@ -106,7 +126,7 @@ function onEnterFrame(dt){
     while(i--)interactables[i].onEnterFrame(dt * 4);
     camera.tryToLevelUp();
     if(Animal.count < Animal.maxCount && prob(.1 + .5 * (1 - Animal.animalRatio)))new Animal().insertIntoTree();
-    if(prob(.8))new Food().insertIntoTree();
+    if(prob(1.2))new Food().insertIntoTree();
 }
 var mouse = {
     x:0,

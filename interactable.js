@@ -56,6 +56,12 @@ class Interactable{
     rotationTowards(obj){
         return Math.atan2(this.y-obj.y,this.x-obj.x).radToDeg();
     }
+    static clear(){
+        tree.clear();
+        let i = interactables.length;
+        while(i--)interactables[i].onDestroy();
+        interactables = [];
+    }
     get width(){
         return pps * this.size;
     }
