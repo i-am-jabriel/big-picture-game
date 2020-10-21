@@ -71,8 +71,8 @@ class Animal extends Interactable{
         if(inView){
             var color = "rgba(255,255,0,0.5)";
             if(!this.mc){
-                if(mc.canEat(this))color = "#rgba(0,255,0,0.5)";
-                else if(this.canEat(mc)) color = "#rgba(255,0,0,0.5)";
+                if(mc.canEat(this))color = "rgba(0,255,0,0.5)";
+                else if(this.canEat(mc)) color = "rgba(255,0,0,0.5)";
             }
             context.beginPath();
             context.strokeStyle=color;
