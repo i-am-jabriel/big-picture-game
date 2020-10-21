@@ -103,4 +103,4 @@ class Interactable{
     get maxY(){return this.bottom;}
 }
 
-const tree = new rbush(25);
+const tree = new rbush(35);

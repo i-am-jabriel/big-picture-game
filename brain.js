@@ -28,11 +28,13 @@ class Brain{
                 break;
         }
         this.parent.rotation = lerpAngle(this.parent.rotation, this.targetRot, 0.1).mod(360);
+        this.turbo = prob(10 + 50 * Math.pow(this.parent.energy.ratio,2));
     }
     clearTarget(){
         this.mode = null;
         this.trg = null;
         this.turbo = false;
+        this.targetRot = Random.range(0,360);
     }
     evaluateSurrondings(){
         var l = tree.search(this.AABB(450)).filter(x=>x!=this.parent);

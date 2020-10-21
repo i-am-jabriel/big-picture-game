@@ -5,7 +5,7 @@ canvas{
     z-index: -1;
     background: #ADD8E6;
 }
-body, button{
+* {
   cursor: url(img/cursor.png), auto;
 }
 body{
@@ -31,6 +31,7 @@ button{
   transition: all 0.3s;
   padding:2em 3em;
   margin:0 2em;
+  outline: none;
 }
 button:hover{
   border:1px solid rgba(0,0,0,0.5);
@@ -38,6 +39,7 @@ button:hover{
   border-radius:5%;
 }
 #shape-selector{
+  font-family: 'Architects Daughter', cursive;
   align-items: center;
   background:rgba(255, 255, 255, 0.4);
   align-self: center;

@@ -80,7 +80,7 @@ function onGameLoaded(){
             body.className = b;
             gameOver.className = g;
         }
-        tree.search(mouse.aabb).forEach(x=>x.onClick());
+        // tree.search(mouse.aabb).forEach(x=>x.onClick());
     });
     window.addEventListener('mousedown',()=>mc.turbo=true);
     window.addEventListener('mouseup',()=>mc.turbo=false);

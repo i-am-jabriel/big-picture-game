@@ -6,8 +6,8 @@ Number.prototype.degToRad = function() {
 Number.prototype.radToDeg =  function() {
     return this / (Math.PI / 180);
   };
-var minDistance = 15;
-var maxSpeed = 0.05;
+var minDistance = 30;
+var maxSpeed = 0.06;
 var turboEnergyCost = .01;
 var ambientEnergyGain = .004;
 class Animal extends Interactable{
@@ -18,7 +18,7 @@ class Animal extends Interactable{
         if(!mc)mc=this;
         
         this.init(...arguments);
-        this.speed = 0.01;
+        this.speed = maxSpeed;
         this.alive = true;
         this.bounce = {
             rate: 1.7,
@@ -32,7 +32,6 @@ class Animal extends Interactable{
         this.energy = new Range(0,100,100);
         if(mc == this){
             this.size = 1;
-            this.speed = 0.05;
             this.energy.onValue.push(()=>{
                 var width = Math.round(this.energy.value)+'%';
                 browserElements['#energy-text'].innerText = browserElements['#energy-bar'].style.width = width;
@@ -68,7 +67,7 @@ class Animal extends Interactable{
         }
         if(prob(speedMod * (this.turbo ? 2.5 : .5) * this.size) && inView)new Particle('smoke',this.x,this.y).size *= .3+Math.pow(this.size,.75); 
         Interactable.prototype.onEnterFrame.call(this,dt);
-        if(inView){
+        if(inView && mc.alive){
             var color = "rgba(255,255,0,0.3)";
             if(!this.mc){
                 if(mc.canEat(this))color = "rgba(0,255,0,0.3)";
@@ -102,7 +101,7 @@ class Animal extends Interactable{
             if(!paused){
                 console.log(Animal.count);
                 this.alive = true;
-                setTimeout(()=>mc.alive=false,2000)
+                setTimeout(()=>interactables.indexOf(mc)==-1?mc.alive=false:0,2000)
             }
             browserElements['body'].className = 'gray';
             browserElements['#game-over'].className='visible';
