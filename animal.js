@@ -85,17 +85,18 @@ class Animal extends Interactable{
         Interactable.prototype.onDestroy.call(this);
         this.alive = false;
         if(this.mc){
-            this.alive = true;
-            setTimeout(3000,this.alive=false);
+            console.log(this.mc);
+            this.alive = false;
+            // setTimeout(()=>mc.alive=false,2000);
             browserElements['body'].className = 'gray';
             browserElements['#game-over'].className='visible';
             browserElements['#hud'].className='hidden';
-            browserElements['#score'].innerText = 'Score: '+Math.round(camera.scale+this.size);
+            browserElements['#score'].innerText = 'Score: '+Math.round(2 * (camera.scale+this.size));
             this.size = 2;
         }
     }
     canEat(animal){
-        return this.size - 1.5 > animal.size || this.size/animal.size > 2;
+        return this.size - 2.25 > animal.size || this.size/animal.size > 2;
     }
     /*checkCollision(shape){
         if(shape==this)return false;
@@ -160,8 +161,8 @@ class Animal extends Interactable{
         var f = applyOverTime(300,(x,dt) =>{
             this.x += Math.cos(theta) * dt * (1-x) * .8;
             this.y += Math.sin(theta) * dt * (1-x) * .8;
-            this.size *= .999 -(.01 * Math.pow(r,1.5) * (1-x));
-            this.size = Math.max(this.  size,.1);
+            this.size *= .999 -(.005 * Math.pow(r,1.8) * (1-x));
+            this.size = Math.max(this.size,.1);
         },()=>{
             if(this.bumped == f)this.bumped = null;
         });

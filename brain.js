@@ -13,10 +13,14 @@ class Brain{
                     this.clearTarget();
                     break;
                 }
+                this.parent.turbo = tree.search(this.AABB(250+this.size)).length > 1;
                 this.targetRot = this.parent.rotationTowards(this.trg) + 180;
             case 'chase':
                 if(this.trg.size >= this.parent.size || this.trg.id === null || prob(this.duration+=dt/100))this.clearTarget();
-                else this.targetRot = this.parent.rotationTowards(this.trg);
+                else {
+                    this.targetRot = this.parent.rotationTowards(this.trg);
+                    this.parent.turbo = this.parent.distance(this.trg) < 150 + this.size;
+                }
                 break;
             default:
                 if(prob(20))this.evaluateSurrondings();
@@ -28,9 +32,10 @@ class Brain{
     clearTarget(){
         this.mode = null;
         this.trg = null;
+        this.turbo = false;
     }
     evaluateSurrondings(){
-        var l = tree.search(this.AABB(350)).filter(x=>x!=this.parent);
+        var l = tree.search(this.AABB(450)).filter(x=>x!=this.parent);
         if(!l.length){
             if(prob(1))this.targetRot = Random.range(0,360);
             if(!camera.inView(this.parent)) this.targetRot = this.parent.rotationTowards(spawn);
@@ -73,6 +78,9 @@ class Brain{
     //Returns a number based on how easy it would be to eat target
     evaluateObj(obj){
         if((obj.size > this.parent.size && obj.constructor.name != 'Food') || obj == this.parent)return 0;
-        return (400-this.parent.distance(obj)) * (obj.eating ? 2 : 1);
-    }   
+        return (500-this.parent.distance(obj)) * (obj.eating ? 2 : 1);
+    }
+    get size(){
+        return this.parent.size*pps;
+    }
 }

@@ -114,7 +114,7 @@ button{
   user-select: none;
   z-index: 1;
 }
-#game-over.visible{
+#game-over.visible, #game-over.intro{
   opacity:1;
   transition: opacity 3s ease-in;
 }

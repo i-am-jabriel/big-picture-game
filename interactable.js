@@ -7,7 +7,7 @@ class Interactable{
         this.rotation = 0;
         this.x = spawn.x;
         this.y = spawn.y;
-        this.size =     1;
+        this.size = 1;
     }
     onEnterFrame(dt){
         if(this.canMove){
@@ -99,4 +99,4 @@ class Interactable{
     get maxY(){return this.bottom;}
 }
 
-const tree = new rbush(12);
+const tree = new rbush(16);

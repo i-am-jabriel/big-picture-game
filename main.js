@@ -129,6 +129,7 @@ function restartGame(){
     browserElements['body'].className = '';
     browserElements['#game-over'].className = '';
     browserElements['#hud'].className = '';
+    paused = false;
 }
 function tick() {
     var now = Date.now();
@@ -143,7 +144,7 @@ function onEnterFrame(dt){
     let i=interactables.length;
     while(i--)interactables[i].onEnterFrame(dt * 4);
     camera.tryToLevelUp();
-    if(Animal.count < Animal.maxCount && prob(.05 + .25 * (1 - Animal.animalRatio)))new Animal().insertIntoTree();
+    if(Animal.count < Animal.maxCount && prob(.02 + .08 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
     if(prob(1.3))new Food().insertIntoTree();
 }
 var mouse = {
