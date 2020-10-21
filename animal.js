@@ -9,7 +9,7 @@ Number.prototype.radToDeg =  function() {
 var minDistance = 15;
 var maxSpeed = 0.05;
 var turboEnergyCost = .01;
-var ambientEnergyGain = .001;
+var ambientEnergyGain = .004;
 class Animal extends Interactable{
     constructor(index = null){
         Animal.count++;
@@ -40,7 +40,7 @@ class Animal extends Interactable{
             this.turbo = false;
         }
         else{
-            this.size = (Random.range(0.001,2)*Math.max(mc.size,.5)).clamp(.1,1.5 + Math.pow(mc.size+1,0.5));
+            this.size = (Random.range(0.01,1.8)*Math.max(mc.size,.6)).clamp(.1,1.5 + Math.pow(mc.size+1,0.5));
             if(camera.levelingUp) this.size *= 2;
             this.x += this.randomX_;
             this.y += this.randomY_;
@@ -50,21 +50,35 @@ class Animal extends Interactable{
         }
     }
     onEnterFrame(dt){
+        var speedMod = 1;
+        var inView = camera.inView(this);
         if(mc ===  this){
             if(mouse.distance(this)>=minDistance){
-                this.speed = maxSpeed;
                 var targetRot = Math.atan2(this.y + camera.y - mouse.y, this.x + camera.x - mouse.x).radToDeg();
-                this.rotation = lerpAngle(this.rotation,targetRot,0.2).mod(360);            
-            }else this.speed = 0;
+                this.rotation = lerpAngle(this.rotation,targetRot,0.2).mod(360);           
+            }else speedMod = 0;
+            
         } else this.brain.onEnterFrame(dt);
         
         if(this.turbo && this.canMove && (this.energy.value -= (dt * turboEnergyCost)) > 0.01){
-            this.speed = maxSpeed * 2;
+            this.speed = maxSpeed * 2 * speedMod;
         }else{
-            this.speed = maxSpeed;
+            this.speed = maxSpeed * speedMod;
             this.energy.value += dt * ambientEnergyGain;
         }
+        if(prob(speedMod * (this.turbo ? 2.5 : .5) * this.size) && inView)new Particle('smoke',this.x,this.y).size *= .3+Math.pow(this.size,.75); 
         Interactable.prototype.onEnterFrame.call(this,dt);
+        if(inView){
+            var color = "rgba(255,255,0,0.5)";
+            if(!this.mc){
+                if(mc.canEat(this))color = "#rgba(0,255,0,0.5)";
+                else if(this.canEat(mc)) color = "#rgba(255,0,0,0.5)";
+            }
+            context.beginPath();
+            context.strokeStyle=color;
+            context.arc(this.x + camera.x, this.y + camera.y, this.height * .75, 0, Math.PI * 2);
+            context.stroke();
+        }
     }
     init(index){
         this.index = index || Math.floor(Math.random() * (Animal.sprites.length));

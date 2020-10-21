@@ -95,19 +95,23 @@ class Range{
         this.min = min;
         this.max = max;
         this.onValue = [];
-        this._value = value;
+        this._value = value || min;
     }
     range(){
         return Random.range(this.min,this.max);
     }
-    ratio(){
-        return this.min/this.max;
+    
+    reset(){
+        this._value = this.min;
+    }
+    clone(){
+        return Object.assign({},this);
     }
     get vMax(){
         return this._value /this.max;
     }
-    clone(){
-        return Object.assign({},this);
+    get ratio(){
+        return this.min/this.max;
     }
     get value(){
         return this._value;

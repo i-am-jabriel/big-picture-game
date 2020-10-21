@@ -29,6 +29,9 @@ function loadImages(){
     var foods = toArray(`apple.png  broccoli.png  carrot.png  eggplant.png  leek.png      paprika.png
     beet.png   cabbage.png   corn.png    grapes.png    mushroom.png  radish.png`);
 
+    var smoke = toArray(`smoke_01.png  smoke_03.png  smoke_05.png  smoke_07.png  smoke_09.png
+    smoke_02.png  smoke_04.png  smoke_06.png  smoke_08.png`).map(x=>createImageForObject('img/particles/'+x));
+
     var loaded = animals.length + foods.length;
     var onLoad = x => !(--loaded) ? onGameLoaded() : 0;
     function createImageForObject(url){
@@ -45,6 +48,7 @@ function loadImages(){
     for(var i in foods){
         Food.sprites.push(createImageForObject(`img/food/${foods[i]}`));
     }
+    Particle.registerParticle('smoke',smoke,8);
 }
 
 function toArray(s){
@@ -144,7 +148,7 @@ function onEnterFrame(dt){
     let i=interactables.length;
     while(i--)interactables[i].onEnterFrame(dt * 4);
     camera.onEnterFrame(dt);
-    if(Animal.count < Animal.maxCount && prob(.05 + .25 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
+    if(Animal.count < Animal.maxCount && prob(.05 + .20 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
     if(prob(3))new Food().insertIntoTree();
 }
 var mouse = {

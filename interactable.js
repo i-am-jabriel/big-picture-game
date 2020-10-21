@@ -1,5 +1,5 @@
 var interactables = [];
-var pps = 30;
+var pps = 32;
 class Interactable{
     constructor(){
         this.id = interactables.push(this) - 1;
@@ -33,16 +33,12 @@ class Interactable{
     }
     destroy(){
         this.onDestroy();
-        interactables.splice(this.id,1);
-        let i = interactables.length;
-        while(i--)interactables[i].id = i;
+        interactables.splice(interactables.indexOf(this),1);
     }
     static destroyAll(arr){
         let i = arr.length;
         while(i--)arr[i].onDestroy();
         interactables = interactables.filter(x=>arr.indexOf(x)==-1);
-        i = interactables.length;
-        while(i--)interactables[i].id = i;
     }
     onDestroy(){
         this.id = null;

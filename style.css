@@ -3,7 +3,10 @@ canvas{
     top:0;
     left:0;
     z-index: -1;
-    background:#999;
+    background: #ADD8E6;
+}
+*{
+  cursor: url(img/cursor.png), auto;
 }
 body{
     margin:0;
@@ -22,16 +25,16 @@ body{
     height:50px;
 }
 button{
-    cursor: pointer;
     user-select: none;
 }
 #shape-selector{
-    align-items: center;
-    display:inline-flex;
-    align-self: center;
-    border:1px black solid;
-    padding:2em 4em;
-    user-select: none;
+  align-items: center;
+  background:rgba(255, 255, 255, 0.4);
+  align-self: center;
+  border:1px black solid;
+  padding:3em 6em;
+  user-select: none;
+  border-radius:5%;
 }
 .hidden{display:none;}
 #hud {
@@ -106,6 +109,7 @@ button{
   position:relative;
   width:100vw;
   height:100vh;
+  justify-content: center;
 }
 #game-over{
   font-size:10em;
@@ -124,6 +128,7 @@ button{
   position: fixed;
   text-align: center;
   width:100vw;
+  top:0;
 }
 #score{
   text-align:left;
