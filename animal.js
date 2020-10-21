@@ -6,7 +6,6 @@ Number.prototype.degToRad = function() {
 Number.prototype.radToDeg =  function() {
     return this / (Math.PI / 180);
   };
-var pps =  40; //pixelpersize
 var minDistance = 15;
 var maxSpeed = 0.05;
 var turboEnergyCost = .01;
@@ -43,8 +42,8 @@ class Animal extends Interactable{
         else{
             this.size = (Random.range(0.001,2)*Math.max(mc.size,.5)).clamp(.1,1.5 + Math.pow(mc.size+1,0.5));
             if(camera.levelingUp) this.size *= 2;
-            this.x += this.randomX;
-            this.y += this.randomY;
+            this.x += this.randomX_;
+            this.y += this.randomY_;
             this.rotation = Random.range(0,360);
             this.speed = 0.05;
             this.brain = new Brain(this);
@@ -54,7 +53,7 @@ class Animal extends Interactable{
         if(mc ===  this){
             if(mouse.distance(this)>=minDistance){
                 this.speed = maxSpeed;
-                var targetRot = Math.atan2(this.y - mouse.y, this.x - mouse.x).radToDeg();
+                var targetRot = Math.atan2(this.y + camera.y - mouse.y, this.x + camera.x - mouse.x).radToDeg();
                 this.rotation = lerpAngle(this.rotation,targetRot,0.2).mod(360);            
             }else this.speed = 0;
         } else this.brain.onEnterFrame(dt);
@@ -92,7 +91,7 @@ class Animal extends Interactable{
             browserElements['#game-over'].className='visible';
             browserElements['#hud'].className='hidden';
             browserElements['#score'].innerText = 'Score: '+Math.round(2 * (camera.scale+this.size));
-            this.size = 2;
+            this.size = 1.5;
         }
     }
     canEat(animal){
@@ -121,13 +120,13 @@ class Animal extends Interactable{
                 case 'Food':
                     food = collider;
                     eater = this;
-                    eatDurationMod = .8;
-                    growthMod = .6;
+                    eatDurationMod = .65;
+                    growthMod = .65;
                     break;
                 case 'Animal':
                     eater = this.size >= collider.size ? this : collider;
                     food  = this.size >= collider.size ? collider : this;
-                    growthMod = 1.3;
+                    growthMod = 1.35;
                     eatDurationMod = 1.8;
                     break;
             }
@@ -178,7 +177,7 @@ class Animal extends Interactable{
         tree.load(l);
     }
     static count = 0;
-    static maxCount = 30;
+    static maxCount = 50;
     static get animalRatio(){ return Animal.count/Animal.maxCount;}
     
 }

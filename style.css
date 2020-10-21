@@ -45,6 +45,7 @@ button{
     width:40em;
     height: 2em;
     user-select: none;
+    opacity: 0.7;
 }
 #hud input {
   display: none;

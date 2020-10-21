@@ -1,8 +1,11 @@
 var spawn={
     get x(){return this._x + camera.x;},
-    get y(){return this._y + camera.y;}
+    get y(){return this._y + camera.y;},
+    _x:0,
+    _y:0
 };
 
+var cameraPadding = 0.98;
 class Camera{
     constructor(){
         this.x = 0;
@@ -12,12 +15,17 @@ class Camera{
         this.onResize();
         /*window.addEventListener('resize',x=>this.onResize());*/
     }
+    onEnterFrame(){
+        this.tryToLevelUp();
+        camera.x = -lerp(camera.x, mc.x - camera.width * .5, cameraPadding);
+        camera.y = -lerp(camera.y, mc.y - camera.height * .5, cameraPadding);
+    }
     inView(obj, margin = 20){
         if(
-            obj.x >= this.x - margin &&
-            obj.x <= this.x + this.width + margin &&
-            obj.y >= this.y - margin &&
-            obj.y <= this.y + this.height + margin
+            obj.x >= -this.x - margin &&
+            obj.x <= -this.x + this.width + margin &&
+            obj.y >= -this.y - margin &&
+            obj.y <= -this.y + this.height + margin
         ) {
            return true;
         }

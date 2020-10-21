@@ -4,9 +4,9 @@ class Food extends Interactable{
         super(...arguments);
         this.index = index || Random.intRange(0,Food.sprites.length-1);
         this.image = Food.sprites[this.index];
-        this.x += this.randomX;
-        this.y += this.randomY;
-        this.size = Random.range(.6,1.4);
+        this.x += this.randomX_;
+        this.y += this.randomY_;
+        this.size = Random.range(.55,1.46);
     }
     static sprites = [];
     static spawnFood(i=40){

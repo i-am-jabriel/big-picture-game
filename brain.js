@@ -16,7 +16,7 @@ class Brain{
                 this.parent.turbo = tree.search(this.AABB(250+this.size)).length > 1;
                 this.targetRot = this.parent.rotationTowards(this.trg) + 180;
             case 'chase':
-                if(this.trg.size >= this.parent.size || this.trg.id === null || prob(this.duration+=dt/100))this.clearTarget();
+                if(this.trg.size >= this.parent.size || this.trg.id === null || prob(this.duration+=dt/250))this.clearTarget();
                 else {
                     this.targetRot = this.parent.rotationTowards(this.trg);
                     this.parent.turbo = this.parent.distance(this.trg) < 150 + this.size;
@@ -38,13 +38,13 @@ class Brain{
         var l = tree.search(this.AABB(450)).filter(x=>x!=this.parent);
         if(!l.length){
             if(prob(1))this.targetRot = Random.range(0,360);
-            if(!camera.inView(this.parent)) this.targetRot = this.parent.rotationTowards(spawn);
+            if(!camera.inView(this.parent)) this.targetRot = this.parent.rotationTowards(mc);
             return;
         }
         var target = this.targetEvaluation(l);
         var sizes = l.map(x=>{return {parent:x,size:x.size}});
         var biggest = sizes.reduce((a,c)=>a.size>=c.size?a:c);
-        if(this.parent.size < biggest.size && biggest.parent.constructor.name != 'Food'){
+        if(this.parent.size < biggest.size && biggest.parent.constructor.name != 'Food' && prob(50)){
             this.mode = 'flee';
             this.trg = biggest.parent;
             return;

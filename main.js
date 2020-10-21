@@ -115,8 +115,8 @@ function restartGame(){
     Interactable.clear();
     camera.scale = 0;
     Animal.animalCount = 0;
-    Animal.spawnAnimals(1);
-    Food.spawnFood(5);
+    Animal.spawnAnimals(10);
+    Food.spawnFood(30);
     mc.insertIntoTree();
     interactables.push(mc);
     mc.size = 1;
@@ -143,9 +143,9 @@ function onEnterFrame(dt){
     context.clearRect(0, 0, browserElements['canvas'].width, browserElements['canvas'].height);
     let i=interactables.length;
     while(i--)interactables[i].onEnterFrame(dt * 4);
-    camera.tryToLevelUp();
-    if(Animal.count < Animal.maxCount && prob(.02 + .08 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
-    if(prob(1.3))new Food().insertIntoTree();
+    camera.onEnterFrame(dt);
+    if(Animal.count < Animal.maxCount && prob(.05 + .25 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
+    if(prob(3))new Food().insertIntoTree();
 }
 var mouse = {
     x:0,

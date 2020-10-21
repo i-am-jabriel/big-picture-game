@@ -1,4 +1,5 @@
 var interactables = [];
+var pps = 30;
 class Interactable{
     constructor(){
         this.id = interactables.push(this) - 1;
@@ -28,7 +29,7 @@ class Interactable{
     }
     render(dt){
         if(this.bounce)this.bounce.count = ((this.bounce.count + (dt / (1000 * this.bounce.rate)))) % (Math.PI);
-        context.drawImage(this.image, this.x - this.width * .5, this.y - this.height *.5, this.width, this.height * this.bounceHeight);
+        context.drawImage(this.image, this.x - this.width * .5 + camera.x, this.y - this.height *.5 + camera.y, this.width, this.height * this.bounceHeight);
     }
     destroy(){
         this.onDestroy();
@@ -74,6 +75,12 @@ class Interactable{
     get randomY(){
         return Math.random() * camera.height * .9 - camera.height * .45;
     }
+    get randomX_(){
+        return Random.range(0,camera.width*1.5)*(prob(50)?-1:1)+mc.x;
+    }
+    get randomY_(){
+        return Random.range(0,camera.height*1.5)*(prob(50)?-1:1)+mc.y;
+    }
     get left(){
         return this.x - this.width * .5;
     }
@@ -99,4 +106,4 @@ class Interactable{
     get maxY(){return this.bottom;}
 }
 
-const tree = new rbush(16);
+const tree = new rbush(25);

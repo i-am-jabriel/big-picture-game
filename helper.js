@@ -13,6 +13,9 @@ Number.prototype.clamp = function(a, b){
     }
     return Math.min(big,Math.max(this,small));
 }
+Number.prototype.between = function(a,b){
+    return this > a && this < b;
+}
 function prob(n){
     return Math.random() * 100 <= n;
 }
