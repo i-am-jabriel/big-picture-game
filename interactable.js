@@ -31,6 +31,7 @@ class Interactable{
         if(this.bounce)this.bounce.count = ((this.bounce.count + (dt / (1000 * this.bounce.rate)))) % (Math.PI);
         context.drawImage(this.image, this.x - this.width * .5 + camera.x, this.y - this.height *.5 + camera.y, this.width, this.height * this.bounceHeight);
     }
+    onClick(){console.log(this)}
     destroy(){
         this.onDestroy();
         interactables.splice(interactables.indexOf(this),1);
@@ -95,7 +96,7 @@ class Interactable{
     get bounceHeight(){
         return this.bounce ? lerp(this.bounce.range.min,this.bounce.range.max,Math.sin(this.bounce.count)) : 1;
     }
-    get mc(){return this == mc;}
+    get mc(){return this === mc;}
     get minX(){return this.left;}
     get minY(){return this.top;}
     get maxX(){return this.right;}

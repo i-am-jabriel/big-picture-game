@@ -80,6 +80,7 @@ function onGameLoaded(){
             body.className = b;
             gameOver.className = g;
         }
+        tree.search(mouse.aabb).forEach(x=>x.onClick());
     });
     window.addEventListener('mousedown',()=>mc.turbo=true);
     window.addEventListener('mouseup',()=>mc.turbo=false);
@@ -116,6 +117,7 @@ function startGame(){
     gameLoop = setInterval(tick, 10);
 }
 function restartGame(){
+    paused=true;
     Interactable.clear();
     camera.scale = 0;
     Animal.animalCount = 0;
@@ -156,6 +158,14 @@ var mouse = {
     y:0,
     distance:function(p){
         return Math.sqrt(Math.pow(this.x-p.x,2)+Math.pow(this.y-p.y,2));
+    },
+    get aabb(){
+        return {
+            mixX:this.x + camera.x,
+            maxX:this.x + 50 + camera.x,
+            minY:this.y + camera.y,
+            maxY:this.y + 50 + camera.y,
+        };
     }
 }
 var paused=false;

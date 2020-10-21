@@ -11,7 +11,7 @@ var maxSpeed = 0.05;
 var turboEnergyCost = .01;
 var ambientEnergyGain = .004;
 class Animal extends Interactable{
-    constructor(index = null){
+    constructor(index = 0){
         Animal.count++;
         super(...arguments);
         
@@ -52,7 +52,7 @@ class Animal extends Interactable{
     onEnterFrame(dt){
         var speedMod = 1;
         var inView = camera.inView(this);
-        if(mc ===  this){
+        if(mc === this){
             if(mouse.distance(this)>=minDistance){
                 var targetRot = Math.atan2(this.y + camera.y - mouse.y, this.x + camera.x - mouse.x).radToDeg();
                 this.rotation = lerpAngle(this.rotation,targetRot,0.2).mod(360);           
@@ -69,10 +69,10 @@ class Animal extends Interactable{
         if(prob(speedMod * (this.turbo ? 2.5 : .5) * this.size) && inView)new Particle('smoke',this.x,this.y).size *= .3+Math.pow(this.size,.75); 
         Interactable.prototype.onEnterFrame.call(this,dt);
         if(inView){
-            var color = "rgba(255,255,0,0.5)";
+            var color = "rgba(255,255,0,0.3)";
             if(!this.mc){
-                if(mc.canEat(this))color = "rgba(0,255,0,0.5)";
-                else if(this.canEat(mc)) color = "rgba(255,0,0,0.5)";
+                if(mc.canEat(this))color = "rgba(0,255,0,0.3)";
+                else if(this.canEat(mc)) color = "rgba(255,0,0,0.3)";
             }
             context.beginPath();
             context.strokeStyle=color;
@@ -97,10 +97,13 @@ class Animal extends Interactable{
         if(this.brain)this.brain = null;
         Interactable.prototype.onDestroy.call(this);
         this.alive = false;
-        if(this.mc){
-            console.log(this.mc);
-            this.alive = false;
-            // setTimeout(()=>mc.alive=false,2000);
+        if(mc===this){
+            //console.log(this.mc);
+            if(!paused){
+                console.log(Animal.count);
+                this.alive = true;
+                setTimeout(()=>mc.alive=false,2000)
+            }
             browserElements['body'].className = 'gray';
             browserElements['#game-over'].className='visible';
             browserElements['#hud'].className='hidden';
@@ -151,7 +154,6 @@ class Animal extends Interactable{
             }
             if(eater == food)continue;
             eaten.push(food);
-            // console.log(eater,food);
             var eatingDuration = 500 * eatDurationMod;
             var gains = Math.min(2,growthMod * (Math.random() *.3 +.3) * food.size) / eatingDuration;
             eater.bounce.rate = eater.bounce.originalRate * .2;
