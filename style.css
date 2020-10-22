@@ -140,7 +140,7 @@ button:hover{
 .main-container{
   position:relative;
   width:100vw;
-  height:100vh;
+  height:92vh;
   justify-content: center;
 }
 #game-over{

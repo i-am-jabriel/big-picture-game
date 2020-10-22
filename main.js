@@ -6,6 +6,10 @@ loadElements('canvas','#shape-image','#left-shape-button','#right-shape-button',
 );
 var context = browserElements['canvas'].getContext('2d');
 context.imageSmoothingEnabled = false;
+context.font = '26px Architects Daughter';
+context.textAlign = "center";
+context.fillColor='white';
+
 
 function loadElements(){
     for(var i in arguments){
@@ -87,8 +91,8 @@ function onGameLoaded(){
         if(key==32)paused =! paused;
     });
     window.addEventListener('mousemove',e=>{
-        mouse.x=e.clientX-mc.size*.5;
-        mouse.y=e.clientY-mc.size*.5
+        mouse.x=e.clientX-mc.height*.5;
+        mouse.y=e.clientY-mc.height*.5
     });
 
 }

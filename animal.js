@@ -9,7 +9,7 @@ Number.prototype.radToDeg =  function() {
 var minDistance = 30;
 var maxSpeed = 0.06;
 var turboEnergyCost = .01;
-var ambientEnergyGain = .004;
+var ambientEnergyGain = .005;
 class Animal extends Interactable{
     constructor(index = 0){
         Animal.count++;
@@ -77,6 +77,9 @@ class Animal extends Interactable{
             context.strokeStyle=color;
             context.arc(this.x + camera.x, this.y + camera.y, this.height * .75, 0, Math.PI * 2);
             context.stroke();
+            context.strokeStyle='rgba(0,0,0,0.8)';
+            context.strokeText((this.size+camera.scale).toFixed(1),this.x+camera.x-5,this.y+camera.y);
+
         }
     }
     init(index){
@@ -111,7 +114,8 @@ class Animal extends Interactable{
         }
     }
     canEat(animal){
-        return this.size - 2.25 > animal.size || this.size/animal.size > 2;
+        //this.size - 2.25 > animal.size ||
+        return  this.size/animal.size > 2.25;
     }
     /*checkCollision(shape){
         if(shape==this)return false;
@@ -154,7 +158,7 @@ class Animal extends Interactable{
             if(eater == food)continue;
             eaten.push(food);
             var eatingDuration = 500 * eatDurationMod;
-            var gains = Math.min(2,growthMod * (Math.random() *.3 +.3) * food.size) / eatingDuration;
+            var gains = Math.min(2,growthMod * (Math.random() *.3 +.3) * food.size) / eatingDuration * 1.8;
             eater.bounce.rate = eater.bounce.originalRate * .2;
             eater.bounce.range.max *= 1.1;
             var f = applyOverTime(eatingDuration, (a,dt)=>eater.size += dt * gains,()=>{
