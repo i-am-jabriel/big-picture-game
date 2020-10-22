@@ -41,7 +41,12 @@ function loadImages(){
     beet.png   cabbage.png   corn.png    grapes.png    mushroom.png  radish.png`).map(x=>createImageForObject('img/food/'+x));
 
     var smoke = toArray(`smoke_01.png  smoke_03.png  smoke_05.png  smoke_07.png  smoke_09.png
-    smoke_02.png  smoke_04.png  smoke_06.png  smoke_08.png`).map(x=>createImageForObject('img/particles/'+x));
+    smoke_02.png  smoke_04.png  smoke_06.png  smoke_08.png`).map(x=>createImageForObject('img/particles/smoke/'+x));
+
+    var circle = toArray(`circle_01.png  circle_02.png  circle_03.png  circle_04.png`).map(x=>createImageForObject('img/particles/circle/'+x));
+
+    var spark = toArray(`spark_01.png  spark_03.png  spark_05.png
+    spark_02.png  spark_04.png  spark_06.png`).map(x=>createImageForObject('img/particles/spark/'+x));
 
     var clouds = toArray(`Cloud10.png  Cloud1b.png  Cloud3b.png  Cloud4white.png  Cloud8.png
     Cloud1a.png  Cloud2.png   Cloud4.png   Cloud5b.png      Cloud9.png`).map(x=>createImageForObject('img/background/cloud/'+x));
@@ -49,7 +54,9 @@ function loadImages(){
     Food.sprites = foods;
     Animal.sprites = animals;
     Cloud.sprites = clouds;
-    Particle.registerParticle('smoke',smoke,8);
+    Particle.registerParticle('smoke', smoke, 9);
+    Particle.registerParticle('spark', spark, 6);
+    Particle.registerParticle('circle',circle, 3);
 }
 
 function toArray(s){
@@ -91,8 +98,8 @@ function onGameLoaded(){
         if(key==32)paused =! paused;
     });
     window.addEventListener('mousemove',e=>{
-        mouse.x=e.clientX-mc.height*.5;
-        mouse.y=e.clientY-mc.height*.5
+        mouse.x=e.clientX;
+        mouse.y=e.clientY;
     });
 
 }
@@ -118,14 +125,18 @@ function startGame(){
     gameLoop = setInterval(tick, 10);
 }
 function restartGame(){
+    if(camera.levelingUp){
+        clearInterval(camera.levelingUp);
+        camera.levelingUp = null;
+    }
     paused=true;
     Interactable.clear();
     camera.scale = 0;
     Animal.animalCount = 0;
-    Animal.spawnAnimals(10);
+    interactables.push(mc);
+    Animal.spawnAnimals(5);
     Food.spawnFood(30);
     mc.insertIntoTree();
-    interactables.push(mc);
     mc.size = 1;
     mc.x = spawn.x;
     mc.y = spawn.y;
@@ -152,8 +163,8 @@ function onEnterFrame(dt){
     while(i--)interactables[i].onEnterFrame(dt * 4);
     camera.onEnterFrame(dt);
     if(Animal.count < Animal.maxCount && prob(.05 + .20 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
-    if(prob(3))new Food().insertIntoTree();
-    if(prob(2.4))new Cloud();
+    if(prob(3.5))new Food().insertIntoTree();
+    if(prob(2.8))new Cloud();
 }
 var mouse = {
     x:0,

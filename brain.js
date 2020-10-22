@@ -7,19 +7,23 @@ class Brain{
         this.turboRange = Random.range(160,240);
         this.fleeRange = Random.range(400, 700);
         this.chaseRange = Random.range(400,600);
+
+        this.fearfulFactor = Random.range(1000,5000);
+        this.aggroFactor = Random.range(1000,5000);
+
     }
 
     onEnterFrame(dt){
         switch(this.mode){
             case 'flee':
-                if(this.parent.distance(this.trg) > this.fleeRange + this.trg.height || prob(this.duration+=dt/1000)){
+                if(this.parent.distance(this.trg) > this.fleeRange + this.trg.height || prob(this.duration+=dt/this.fearfulFactor)){
                     this.clearTarget();
                     break;
                 }
                 this.parent.turbo = tree.search(this.AABB(250+this.size)).length > 1;
                 this.targetRot = this.parent.rotationTowards(this.trg) + 180;
             case 'chase':
-                if(this.trg.size >= this.parent.size || this.trg.id === null || prob(this.duration+=dt/250))this.clearTarget();
+                if(this.trg.size >= this.parent.size || this.trg.id === null || prob(this.duration+=dt/this.aggroFactor))this.clearTarget();
                 else {
                     this.targetRot = this.parent.rotationTowards(this.trg);
                     this.parent.turbo = this.parent.distance(this.trg) < 150 + this.size;

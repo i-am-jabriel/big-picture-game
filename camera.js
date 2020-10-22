@@ -40,12 +40,16 @@ class Camera{
         spawn._y=this.height*.5;
     }
     tryToLevelUp(){
-        var readyToLevelUp = Math.max(...interactables.map(x=>x.constructor.name!='Cloud'?x.size:0))>=14;
+        var readyToLevelUp = Math.max(...interactables.map(x=>x.constructor.name=='Animal'?x.size:0))>=14;
         if(readyToLevelUp && !this.levelingUp){
+            var i=interactables.length;
+            while(i--)new Particle('spark',interactables[i]);
             this.levelingUp = true;
+            browserElements['canvas'].className='level-up';
+            setTimeout(()=>browserElements['canvas'].className='',1000);
             setTimeout(()=>{
                 var shrinkTime = 2000;
-                applyOverTime(shrinkTime, (a,dt)=>{
+                this.levelingUp = applyOverTime(shrinkTime, (a,dt)=>{
                     var i=interactables.length;
                     var shrink = dt * 2.2 / shrinkTime;
                     var destroy = [];
@@ -54,7 +58,7 @@ class Camera{
                     }
                     if(destroy.length>0) Interactable.destroyAll(destroy);
                     this.scale += shrink * 4;
-                },x=>this.levelingUp=false);
+                },x=>this.levelingUp=null);
             },500)
         }
     }

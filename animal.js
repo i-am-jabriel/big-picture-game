@@ -65,7 +65,8 @@ class Animal extends Interactable{
             this.speed = maxSpeed * speedMod;
             this.energy.value += dt * ambientEnergyGain;
         }
-        if(prob(speedMod * (this.turbo ? 2.5 : .5) * this.size) && inView)new Particle('smoke',this.x,this.y).size *= .3+Math.pow(this.size,.75); 
+        if(prob(speedMod * (this.turbo ? 2.5 : .5) * this.size) && inView)
+            new Particle('smoke',this.x,this.y,this,); 
         Interactable.prototype.onEnterFrame.call(this,dt);
         if(inView && mc.alive){
             var color = "rgba(255,255,0,0.3)";
@@ -90,7 +91,6 @@ class Animal extends Interactable{
         return !this.eating && !camera.levelingUp && !paused && !this.bumped;
     }
     static destroyAll(a){
-        Animal.count -= a.length;
         Interactable.destroyAll(a);
     }
     static sprites = [];
@@ -109,7 +109,7 @@ class Animal extends Interactable{
             browserElements['body'].className = 'gray';
             browserElements['#game-over'].className='visible';
             browserElements['#hud'].className='hidden';
-            browserElements['#score'].innerText = 'Score: '+Math.round(2 * (camera.scale+this.size));
+            browserElements['#score'].innerText = 'Score: '+Math.round(1.1 * (camera.scale+this.size));
             this.size = 1.5;
         }
     }
@@ -174,6 +174,7 @@ class Animal extends Interactable{
     }
     bounceAwayFrom(a){
         if(this.bumped)return;
+        new Particle('circle',this);
         var theta = this.rotationTowards(a).degToRad();
         var r =  a.size / this.size;
         var f = applyOverTime(300,(x,dt) =>{

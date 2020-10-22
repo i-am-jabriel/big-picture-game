@@ -4,6 +4,10 @@ canvas{
     left:0;
     z-index: -1;
     background: #ADD8E6;
+    transition: background 1s ease-out;
+}
+canvas.level-up{
+  background:black;
 }
 * {
   cursor: url(img/cursor.png), auto;

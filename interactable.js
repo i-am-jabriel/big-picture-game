@@ -15,7 +15,7 @@ class Interactable{
             this.x += -Math.cos(this.rotation.degToRad()) * this.speed * dt;
             this.y += -Math.sin(this.rotation.degToRad()) * this.speed * dt;
         }
-        if(camera.inView(this))this.render(dt);
+        if(this.onScreen = camera.inView(this))this.render(dt);
         var l = tree.search(this).filter(x=>this.canTarget(x));
         if(l.length)this.handleCollisions(l);
     }
