@@ -4,12 +4,15 @@ class Brain{
         this.targetRot = Random.range(0,360);
         this.mode = null;
         this.duration = 0;
+        this.turboRange = Random.range(120,180);
+        this.fleeRange = Random.range(400, 700);
+        this.chaseRange = Random.range(400,600);
     }
 
     onEnterFrame(dt){
         switch(this.mode){
             case 'flee':
-                if(this.parent.distance(this.trg) > 500){
+                if(this.parent.distance(this.trg) > this.fleeRange + this.trg.height || prob(this.duration+=dt/1000)){
                     this.clearTarget();
                     break;
                 }
@@ -32,12 +35,13 @@ class Brain{
     }
     clearTarget(){
         this.mode = null;
+        this.duration = 0;
         this.trg = null;
         this.turbo = false;
         this.targetRot = Random.range(0,360);
     }
     evaluateSurrondings(){
-        var l = tree.search(this.AABB(450)).filter(x=>x!=this.parent);
+        var l = tree.search(this.AABB(this.chaseRange)).filter(x=>x!=this.parent);
         if(!l.length){
             if(prob(1))this.targetRot = Random.range(0,360);
             if(!camera.inView(this.parent)) this.targetRot = this.parent.rotationTowards(mc);
@@ -56,7 +60,6 @@ class Brain{
             return;
         }
         this.trg = target;
-        this.duration = 0;
         this.mode = 'chase';
     }
     AABB(width, height){
@@ -80,7 +83,7 @@ class Brain{
     //Returns a number based on how easy it would be to eat target
     evaluateObj(obj){
         if((obj.size > this.parent.size && obj.constructor.name != 'Food') || obj == this.parent)return 0;
-        return (500-this.parent.distance(obj)) * (obj.eating ? 2 : 1);
+        return (this.chaseRange*1.1-this.parent.distance(obj)) * (obj.eating ? 2 : 1);
     }
     get size(){
         return this.parent.size*pps;

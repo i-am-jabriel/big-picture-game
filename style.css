@@ -32,11 +32,31 @@ button{
   padding:2em 3em;
   margin:0 2em;
   outline: none;
+  text-shadow:rgba(0,0,0,0.3) 1px 1px 2px;
+  font-size:0.9em;
+  color:white;
+  width:8em;
+  height:6em;
 }
 button:hover{
   border:1px solid rgba(0,0,0,0.5);
   background:rgba(255,255,255,0.5);
   border-radius:5%;
+}
+.yellow-button{
+  color:#ffdd00;
+  -webkit-text-stroke: 1px black;
+}
+#play-button{
+  position: relative;
+
+}
+#play-button span{
+  position: absolute;
+  font-size:2em;
+  top:0.7em;
+  left:0.8em;
+  font-family: 'Architects Daughter', cursive;
 }
 #shape-selector{
   font-family: 'Architects Daughter', cursive;

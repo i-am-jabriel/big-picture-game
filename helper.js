@@ -16,6 +16,10 @@ Number.prototype.clamp = function(a, b){
 Number.prototype.between = function(a,b){
     return this > a && this < b;
 }
+
+Array.prototype.pick = function(){
+    return this[Random.intRange(0,this.length-1)];
+}
 function prob(n){
     return Math.random() * 100 <= n;
 }

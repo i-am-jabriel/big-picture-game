@@ -29,7 +29,11 @@ class Interactable{
     }
     render(dt){
         if(this.bounce)this.bounce.count = ((this.bounce.count + (dt / (1000 * this.bounce.rate)))) % (Math.PI);
-        context.drawImage(this.image, this.x - this.width * .5 + camera.x, this.y - this.height *.5 + camera.y, this.width, this.height * this.bounceHeight);
+        try{
+            context.drawImage(this.image, this.x - this.width * .5 + camera.x, this.y - this.height *.5 + camera.y, this.width, this.height * this.bounceHeight);
+        }catch(e){
+            console.warn('error in rendering interactable',this.constructor.name,this.image,e.message);
+        }
     }
     onClick(){console.log(this)}
     destroy(){
@@ -73,10 +77,10 @@ class Interactable{
         return Math.random() * camera.height * .9 - camera.height * .45;
     }
     get randomX_(){
-        return Random.range(0,camera.width*1.5)*(prob(50)?-1:1)+mc.x;
+        return Random.range(-camera.width*1.25,camera.width*1.25)+mc.x;
     }
     get randomY_(){
-        return Random.range(0,camera.height*1.5)*(prob(50)?-1:1)+mc.y;
+        return Random.range(-camera.width*1.25,camera.height*1.25)+mc.y;
     }
     get left(){
         return this.x - this.width * .5;

@@ -17,37 +17,34 @@ function loadElements(){
 loadImages();
 
 function loadImages(){
-    //var l = [...Array(Animal.spritesize).keys()];
-
-    //l.shift();
+    var loaded = 0;
+    var onLoad = x => !(--loaded) ? onGameLoaded() : 0;
+    function createImageForObject(url){
+        // if(typeof url == 'function')return;
+        var img = new Image();
+        img.src = url;
+        img.onload = onLoad;
+        loaded++;
+        return img;
+    }
     var animals = toArray(`bear.png     crocodile.png  giraffe.png  monkey.png   parrot.png   sloth.png
     buffalo.png  dog.png        goat.png     moose.png    penguin.png  snake.png
     chick.png    duck.png       gorilla.png  narwhal.png  pig.png      walrus.png
     chicken.png  elephant.png   hippo.png    owl.png      rabbit.png   whale.png
-    cow.png      frog.png       horse.png    panda.png    rhino.png    zebra.png`);
+    cow.png      frog.png       horse.png    panda.png    rhino.png    zebra.png`).map(x=>createImageForObject('img/animals/'+x));
     
     var foods = toArray(`apple.png  broccoli.png  carrot.png  eggplant.png  leek.png      paprika.png
-    beet.png   cabbage.png   corn.png    grapes.png    mushroom.png  radish.png`);
+    beet.png   cabbage.png   corn.png    grapes.png    mushroom.png  radish.png`).map(x=>createImageForObject('img/food/'+x));
 
     var smoke = toArray(`smoke_01.png  smoke_03.png  smoke_05.png  smoke_07.png  smoke_09.png
     smoke_02.png  smoke_04.png  smoke_06.png  smoke_08.png`).map(x=>createImageForObject('img/particles/'+x));
 
-    var loaded = animals.length + foods.length;
-    var onLoad = x => !(--loaded) ? onGameLoaded() : 0;
-    function createImageForObject(url){
-        var img = new Image();
-        img.src = url;
-        img.onload = onLoad;
-        return img;
-    }
+    var clouds = toArray(`Cloud10.png  Cloud1b.png  Cloud3b.png  Cloud4white.png  Cloud8.png
+    Cloud1a.png  Cloud2.png   Cloud4.png   Cloud5b.png      Cloud9.png`).map(x=>createImageForObject('img/background/cloud/'+x));
 
-    for(var i in animals){
-        Animal.sprites.push(createImageForObject(`img/animals/${animals[i]}`));
-    }
-
-    for(var i in foods){
-        Food.sprites.push(createImageForObject(`img/food/${foods[i]}`));
-    }
+    Food.sprites = foods;
+    Animal.sprites = animals;
+    Cloud.sprites = clouds;
     Particle.registerParticle('smoke',smoke,8);
 }
 
@@ -152,6 +149,7 @@ function onEnterFrame(dt){
     camera.onEnterFrame(dt);
     if(Animal.count < Animal.maxCount && prob(.05 + .20 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
     if(prob(3))new Food().insertIntoTree();
+    if(prob(3))new Cloud();
 }
 var mouse = {
     x:0,
