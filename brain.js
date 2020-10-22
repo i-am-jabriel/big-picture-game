@@ -4,7 +4,7 @@ class Brain{
         this.targetRot = Random.range(0,360);
         this.mode = null;
         this.duration = 0;
-        this.turboRange = Random.range(120,180);
+        this.turboRange = Random.range(160,240);
         this.fleeRange = Random.range(400, 700);
         this.chaseRange = Random.range(400,600);
     }

@@ -149,7 +149,7 @@ function onEnterFrame(dt){
     camera.onEnterFrame(dt);
     if(Animal.count < Animal.maxCount && prob(.05 + .20 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
     if(prob(3))new Food().insertIntoTree();
-    if(prob(3))new Cloud();
+    if(prob(2.4))new Cloud();
 }
 var mouse = {
     x:0,
