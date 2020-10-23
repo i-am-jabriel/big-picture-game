@@ -40,7 +40,7 @@ class Camera{
         spawn._y=this.height*.5;
     }
     tryToLevelUp(){
-        var readyToLevelUp = Math.max(...interactables.map(x=>x.constructor.name=='Animal'?x.size:0))>=14;
+        var readyToLevelUp = Math.max(...interactables.map(x=>x.constructor.name=='Animal'?x.size:0))>=15;
         if(readyToLevelUp && !this.levelingUp){
             var i=interactables.length;
             while(i--)if(interactables[i].onScreen)new Particle('spark',interactables[i]);

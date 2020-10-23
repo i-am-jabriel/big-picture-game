@@ -58,7 +58,7 @@ class Animal extends Interactable{
     }
     onEnterFrame(dt){
         var speedMod = 1;
-        var inView = camera.inView(this);
+        var inView = this.onScreen;
         if(mc === this){
             if(mouse.distance(this)>=minDistance){
                 var targetRot = Math.atan2(this.y + camera.y - mouse.y, this.x + camera.x - mouse.x).radToDeg();
@@ -73,7 +73,7 @@ class Animal extends Interactable{
             this.speed = maxSpeed * speedMod;
             this.energy.value += dt * ambientEnergyGain;
         }
-        if(prob(speedMod * (this.turbo ? 2.5 : .5) * this.size) && inView)
+        if(prob(speedMod * (this.turbo ? 2.5 : .5) * Math.pow(this.size,0.5) + 1) && inView)
             new Particle('smoke',this.x,this.y,this,); 
         Interactable.prototype.onEnterFrame.call(this,dt);
         if(inView && mc.alive){
@@ -84,7 +84,7 @@ class Animal extends Interactable{
             }
             context.beginPath();
             context.strokeStyle=color;
-            context.arc(this.x + camera.x, this.y + camera.y, this.height * .75, 0, Math.PI * 2);
+            context.arc(this.x + camera.x, this.y + camera.y, this.height * .66, 0, Math.PI * 2);
             context.stroke();
             context.strokeStyle='rgba(0,0,0,0.8)';
             context.strokeText((this.size+camera.scale).toFixed(1),this.x+camera.x-5,this.y+camera.y);
@@ -123,7 +123,7 @@ class Animal extends Interactable{
     }
     canEat(animal){
         //this.size - 2.25 > animal.size ||
-        return  this.size/animal.size > 2.25;
+        return  this.size/animal.size > 2.5;
     }
     /*checkCollision(shape){
         if(shape==this)return false;

@@ -26,9 +26,9 @@ class Cloud extends Interactable{
             this.bounce.range.min *= Random.range(0.95,1.01);
             this.size *= Random.range(0.98,1.02);
             this.speed *= Random.range(0.98,1.02);
-            this.rotation = lerpAngle(this.rotation + Random.range(0,90) * Math.pow(Math.random(),4),this.rotationTowards(mc),0.05);
+            applyOverTime(100,()=>this.rotation = lerpAngle(this.rotation + Random.range(0,10) * Math.pow(Math.random(),4),this.rotationTowards(mc),0.001));
         }
-        if((this.size *= Cloud.shrinkRate)<.1)this.destroy();
+        if((this.size *= Cloud.shrinkRate)<.2)this.destroy();
 
     }
 }

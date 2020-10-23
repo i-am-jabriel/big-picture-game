@@ -1,5 +1,6 @@
 var interactables = [];
 var pps = 32;
+const tree = new rbush(45);
 class Interactable{
     constructor(){
         this.id = interactables.push(this) - 1;
@@ -106,5 +107,3 @@ class Interactable{
     get maxX(){return this.right;}
     get maxY(){return this.bottom;}
 }
-
-const tree = new rbush(35);
