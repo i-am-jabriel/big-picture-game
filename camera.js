@@ -43,10 +43,10 @@ class Camera{
         var readyToLevelUp = Math.max(...interactables.map(x=>x.constructor.name=='Animal'?x.size:0))>=14;
         if(readyToLevelUp && !this.levelingUp){
             var i=interactables.length;
-            while(i--)new Particle('spark',interactables[i]);
+            while(i--)if(interactables[i].onScreen)new Particle('spark',interactables[i]);
             this.levelingUp = true;
             browserElements['canvas'].className='level-up';
-            setTimeout(()=>browserElements['canvas'].className='',1000);
+            setTimeout(()=>browserElements['canvas'].className='',1250);
             setTimeout(()=>{
                 var shrinkTime = 2000;
                 this.levelingUp = applyOverTime(shrinkTime, (a,dt)=>{

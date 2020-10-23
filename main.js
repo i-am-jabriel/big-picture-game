@@ -88,15 +88,30 @@ function onGameLoaded(){
             body.className = b;
             gameOver.className = g;
         }
-        // tree.search(mouse.aabb).forEach(x=>x.onClick());
+        tree.search(mouse.aabb).forEach(x=>x.onClick());
     });
     window.addEventListener('mousedown',()=>mc.turbo=true);
     window.addEventListener('mouseup',()=>mc.turbo=false);
     window.addEventListener('keyup',e=>{
-        let key =e.keyCode || e.charCode;
-        if(key==13)restartGame();
-        if(key==32)paused =! paused;
+        switch(e.key){
+            case 'Enter': 
+                restartGame();
+                break;
+            case 'Escape':
+                togglePause();
+                break;
+            case ' ':
+                mc.turbo = false;
+                break;
+        }
     });
+    window.addEventListener('keydown',e=>{
+        switch(e.key){
+            case ' ':
+                mc.turbo = true;
+                break;
+        }
+    })
     window.addEventListener('mousemove',e=>{
         mouse.x=e.clientX;
         mouse.y=e.clientY;
@@ -123,6 +138,10 @@ function startGame(){
     restartGame();
     lastUpdate = Date.now();
     gameLoop = setInterval(tick, 10);
+}
+function togglePause(){
+    paused = !paused;
+
 }
 function restartGame(){
     if(camera.levelingUp){

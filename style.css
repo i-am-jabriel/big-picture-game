@@ -1,32 +1,44 @@
-canvas{
-    position: absolute;
-    top:0;
-    left:0;
-    z-index: -1;
-    background: #ADD8E6;
-    transition: background 1s ease-out;
-}
-canvas.level-up{
-  background:black;
-}
 * {
   cursor: url(img/cursor.png), auto;
 }
 body{
-    margin:0;
-    padding:0;
-    overflow:hidden;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+}
+canvas{
+  position: absolute;
+  top:0;
+  left:0;
+  z-index: 1;
+  transition: background 1s ease-out;
+  
+}
+canvas.level-up{
+  background:black;
+}
+.main-container{
+  z-index:0;
+  position:relative;
+  width:100vw;
+  height:100vh;
+  justify-content: center;
+  background: #ADD8E6;
+
+  background: linear-gradient(180deg, #add8e6, #e6d7ad, #0f3d46);
+  background-size: 600% 600%;
+  animation: DayNight 60s ease infinite alternate;
 }
 .row{
-    display: flex;
+  display: flex;
 }
 .col, body{
-    display:flex;
-    flex-direction: column;
+  display:flex;
+  flex-direction: column;
 }
 #shape-image{
-  width:50px;
-  height:50px;
+  width:60px;
+  height:60px;
 }
 button{
   user-select: none;
@@ -71,9 +83,12 @@ button:hover{
   padding:3em 6em;
   user-select: none;
   border-radius:5%;
+  position: relative;
+  z-index:3;
 }
 .hidden{display:none;}
 #hud {
+  display:none;
     /* padding: 6px;
     background: rgba(0, 0, 0, 0.25);
     border-radius: 6px;
@@ -141,12 +156,6 @@ button:hover{
 #hud span:last-child {
   float: right;
 }
-.main-container{
-  position:relative;
-  width:100vw;
-  height:92vh;
-  justify-content: center;
-}
 #game-over{
   font-size:10em;
   opacity:0;
@@ -206,3 +215,17 @@ button:hover{
     transform:rotate(720deg);
   }
 }
+
+@-webkit-keyframes DayNight {
+  to{background-position:200% 100%}
+}
+/*@-moz-keyframes DayNight {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@keyframes DayNight {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}*/

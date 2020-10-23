@@ -32,9 +32,17 @@ class Animal extends Interactable{
         this.energy = new Range(0,100,100);
         if(mc == this){
             this.size = 1;
+            //this.hudImage = new Image();
+            //this.hudImage.src = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/172299/bubbles-mask.gif';
+
             this.energy.onValue.push(()=>{
                 var width = Math.round(this.energy.value)+'%';
-                browserElements['#energy-text'].innerText = browserElements['#energy-bar'].style.width = width;
+                //browserElements['#energy-text'].innerText = browserElements['#energy-bar'].style.width = width;
+                context.fillStyle = "#ffdd00";
+                context.fillRect(camera.width-650, 10, 640*this.energy.value*.01,32);
+                context.fillStyle = 'black';
+                context.fillText(width,camera.width-40,30);
+                //if(this.hudImage)context.drawImage(this.hudImage, camera.width-650, 20, 640*this.energy.value*.01,20);
             });
             this.turbo = false;
         }
@@ -158,7 +166,7 @@ class Animal extends Interactable{
             if(eater == food)continue;
             eaten.push(food);
             var eatingDuration = 500 * eatDurationMod;
-            var gains = Math.min(2,growthMod * (Math.random() *.3 +.3) * food.size) / eatingDuration * 1.8;
+            var gains = Math.min(2,growthMod * (Math.random() *.3 +.3) * Math.pow(food.size,0.8)) / eatingDuration * 1.8;
             eater.bounce.rate = eater.bounce.originalRate * .2;
             eater.bounce.range.max *= 1.1;
             var f = applyOverTime(eatingDuration, (a,dt)=>eater.size += dt * gains,()=>{
@@ -174,7 +182,7 @@ class Animal extends Interactable{
     }
     bounceAwayFrom(a){
         if(this.bumped)return;
-        new Particle('circle',this);
+        if(this.onScreen)new Particle('circle',this);
         var theta = this.rotationTowards(a).degToRad();
         var r =  a.size / this.size;
         var f = applyOverTime(300,(x,dt) =>{

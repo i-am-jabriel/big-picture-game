@@ -37,7 +37,7 @@ class Particle extends Interactable{
                 break;
             case 'circle':
                 this.loops=1;
-                this.frameRate.max=250;
+                this.frameRate.max=200;
                 this.size=this.parent.size*.5;
                 first = true;
                 break;
@@ -62,7 +62,6 @@ class Particle extends Interactable{
         this.image = this.pb.images[this.frameCount.value];
         if(!this.image)console.warn('no image:',this.type,this.frameCount.value,this.pb.images.length)
         Interactable.prototype.onEnterFrame.call(this,dt);
-        if(!this.onScreen)this.destroy();
         switch(this.type){
             case 'smoke':
                 this.size *= .995 - .02 * this.frameCount.ratio -0.02 * this.frameRate.ratio;
@@ -70,9 +69,11 @@ class Particle extends Interactable{
             case 'circle':
                 this.x=this.parent.x;
                 this.y=this.parent.y;
-                this.size *= 1.035;
+                this.size *= 1.038;
                 break;
             case 'spark':
+                this.x=this.parent.x;
+                this.y=this.parent.y;
                 this.size=this.parent.size;
                 if(!camera.levelingUp || !this.parent.alive)this.destroy();
                 break;
