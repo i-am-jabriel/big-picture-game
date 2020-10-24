@@ -77,14 +77,14 @@ class Animal extends Interactable{
             new Particle('smoke',this.x,this.y,this,); 
         Interactable.prototype.onEnterFrame.call(this,dt);
         if(inView && mc.alive){
-            var color = "rgba(255,255,0,0.3)";
+            var color = "rgba(255,100,0,0.35)";
             if(!this.mc){
-                if(mc.canEat(this))color = "rgba(0,255,0,0.3)";
-                else if(this.canEat(mc)) color = "rgba(255,0,0,0.3)";
+                if(mc.canEat(this))color = "rgba(0,255,0,0.35)";
+                else if(this.canEat(mc)) color = "rgba(255,0,0,0.35)";
             }
             context.beginPath();
             context.strokeStyle=color;
-            context.arc(this.x + camera.x, this.y + camera.y, this.height * .66, 0, Math.PI * 2);
+            context.arc(this.x + camera.x, this.y + camera.y, this.height * this.bounceHeight * Math.pow(.55,this.size*.1), 0, Math.PI * 2);
             context.stroke();
             context.strokeStyle='rgba(0,0,0,0.8)';
             context.strokeText((this.size+camera.scale).toFixed(1),this.x+camera.x-5,this.y+camera.y);

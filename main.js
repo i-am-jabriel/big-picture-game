@@ -2,7 +2,7 @@ var browserElements = {};
 var mc = new Animal();
 
 loadElements('canvas','#shape-image','#left-shape-button','#right-shape-button','#random-shape-button',
-   '#shape-selector','#play-button','body','#energy-bar','#energy-text','#game-over','#score','#hud'
+   '#shape-selector','#play-button','body','#energy-bar','#energy-text','#game-over','#score','#hud', '#paused'
 );
 var context = browserElements['canvas'].getContext('2d');
 context.imageSmoothingEnabled = false;
@@ -141,6 +141,7 @@ function startGame(){
 }
 function togglePause(){
     paused = !paused;
+    browserElements['#paused'].className = paused ? '' : 'hidden';
 
 }
 function restartGame(){
