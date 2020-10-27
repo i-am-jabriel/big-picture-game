@@ -5,7 +5,7 @@ var spawn={
     _y:0
 };
 
-var cameraPadding = .999;
+var cameraPadding = .99;
 class Camera{
     constructor(){
         this.onResize();

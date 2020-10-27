@@ -6,10 +6,10 @@ class Brain{
         this.duration = 0;
         this.turboRange = Random.range(160,240);
         this.fleeRange = Random.range(400, 700);
-        this.chaseRange = Random.range(400,600) * 1.1;
+        this.chaseRange = Random.range(400,600);
 
-        this.fearfulFactor = Random.range(1000,5000) * 100;
-        this.aggroFactor = Random.range(1000,5000) * 100;
+        this.fearfulFactor = Random.range(1000,5000);
+        this.aggroFactor = Random.range(1000,5000);
         this.turboRange = Random.range(300,600);
 
     }
@@ -40,7 +40,7 @@ class Brain{
         this.duration = 0;
         this.trg = null;
         this.turbo = false;
-        if(prob(1))this.targetRot = Random.range(0,360);
+        if(prob(25))this.targetRot = Random.range(0,360);
     }
     evaluateSurrondings(){
         var l = tree.search(this.AABB(this.chaseRange)).filter(x=>x!=this.parent);
