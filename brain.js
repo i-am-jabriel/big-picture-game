@@ -10,10 +10,12 @@ class Brain{
 
         this.fearfulFactor = Random.range(1000,5000) * 100;
         this.aggroFactor = Random.range(1000,5000) * 100;
+        this.turboRange = Random.range(300,600);
 
     }
 
     onEnterFrame(dt){
+        this.parent.turbo = prob(5 + 50 * Math.pow(this.parent.energy.ratio,3));
         if(prob(20))this.evaluateSurrondings();
         switch(this.mode){
             case 'flee':
@@ -21,7 +23,7 @@ class Brain{
                     this.clearTarget();
                     break;
                 }
-                this.parent.turbo = tree.search(this.AABB(250+this.size)).length > 1;
+                this.parent.turbo = tree.search(this.AABB(this.turboRange + this.size)).length > 1;
                 this.targetRot = this.parent.rotationTowards(this.trg) + 180;
             case 'chase':
                 if(this.trg.size >= this.parent.size || this.trg.id === null || prob(this.duration+=(dt/this.aggroFactor)))this.clearTarget();
@@ -31,15 +33,14 @@ class Brain{
                 }
                 break;
         }
-        this.parent.rotation = lerpAngle(this.parent.rotation, this.targetRot, 1).mod(360);
-        this.turbo = prob(10 + 50 * Math.pow(this.parent.energy.ratio,2));
+        this.parent.rotation = lerpAngle(this.parent.rotation, this.targetRot, .1).mod(360);
     }
     clearTarget(){
         this.mode = null;
         this.duration = 0;
         this.trg = null;
         this.turbo = false;
-        this.targetRot = Random.range(0,360);
+        if(prob(1))this.targetRot = Random.range(0,360);
     }
     evaluateSurrondings(){
         var l = tree.search(this.AABB(this.chaseRange)).filter(x=>x!=this.parent);
@@ -78,6 +79,7 @@ class Brain{
     targetEvaluation(arr){
         var l = arr.map(x=>{return {parent:x,value:this.evaluateObj(x)}});
         var easiest = l.reduce((a,c)=>a.value>=c.value?a:c);
+        return easiest.value ? easiest.parent : null;
         if(easiest.value == 0)return null;
         return easiest.parent;
     }

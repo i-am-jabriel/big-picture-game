@@ -160,6 +160,7 @@ function restartGame(){
     Animal.spawnAnimals(5);
     Food.spawnFood(30);
     mc.insertIntoTree();
+    mc.id = 0;
     mc.size = 1;
     mc.x = spawn.x;
     mc.y = spawn.y;
