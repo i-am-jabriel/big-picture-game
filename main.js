@@ -10,6 +10,8 @@ context.font = '26px Architects Daughter';
 context.textAlign = "center";
 context.fillColor='white';
 
+document.querySelector('#paused video').playbackRate = 0.33;
+
 
 function loadElements(){
     for(var i in arguments){
@@ -149,6 +151,7 @@ function restartGame(){
         clearInterval(camera.levelingUp);
         camera.levelingUp = null;
     }
+    browserElements['#paused'].className = 'hidden';
     paused=true;
     Interactable.clear();
     camera.scale = 0;
@@ -183,7 +186,7 @@ function onEnterFrame(dt){
     while(i--)interactables[i].onEnterFrame(dt * 4);
     camera.onEnterFrame(dt);
     if(Animal.count < Animal.maxCount && prob(.05 + .20 * Math.pow(1 - Animal.animalRatio,3)))new Animal().insertIntoTree();
-    if(prob(3.5))new Food().insertIntoTree();
+    if(prob(4.8))new Food().insertIntoTree();
     if(prob(2.8))new Cloud();
 }
 var mouse = {

@@ -1,6 +1,6 @@
 var interactables = [];
-var pps = 32;
-const tree = new rbush(45);
+var pps = 30;
+const tree = new rbush(50);
 class Interactable{
     constructor(){
         this.id = interactables.push(this) - 1;
@@ -69,7 +69,7 @@ class Interactable{
         return pps * this.size;
     }
     get height(){
-        return pps * this.size;
+        return pps * this.size * this.bounceHeight;
     }
     get randomX(){
         return Math.random() * camera.width * .9 - camera.width * .45;

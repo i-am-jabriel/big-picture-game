@@ -1,4 +1,4 @@
-var camera = new Camera();
+camera = new Camera();
 Number.prototype.degToRad = function() {
     return this * (Math.PI / 180);
   };
@@ -12,11 +12,12 @@ var turboEnergyCost = .01;
 var ambientEnergyGain = .005;
 class Animal extends Interactable{
     constructor(index = 0){
-        Animal.count++;
         super(...arguments);
-        
-        if(!mc)mc=this;
-        
+        if(!mc){
+            mc=this;
+            
+        }
+        Animal.count++;
         this.init(...arguments);
         this.speed = maxSpeed;
         this.alive = true;
@@ -84,7 +85,7 @@ class Animal extends Interactable{
             }
             context.beginPath();
             context.strokeStyle=color;
-            context.arc(this.x + camera.x, this.y + camera.y, this.height * this.bounceHeight * Math.pow(.55,this.size*.1), 0, Math.PI * 2);
+            context.arc(this.x + camera.x, this.y + camera.y, this.height * Math.pow(.53,this.size*.08), 0, Math.PI * 2);
             context.stroke();
             context.strokeStyle='rgba(0,0,0,0.8)';
             context.strokeText((this.size+camera.scale).toFixed(1),this.x+camera.x-5,this.y+camera.y);
@@ -148,8 +149,8 @@ class Animal extends Interactable{
                 case 'Food':
                     food = collider;
                     eater = this;
-                    eatDurationMod = .65;
-                    growthMod = .65;
+                    eatDurationMod = .55;
+                    growthMod = .55;
                     break;
                 case 'Animal':
                     eater = this.size >= collider.size ? this : collider;

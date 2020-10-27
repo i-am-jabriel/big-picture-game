@@ -1,14 +1,14 @@
 var food = [];
 class Food extends Interactable{
     static sprites = [];
-    static foodShrinkRate = .9997;
+    static foodShrinkRate = .9985;
     constructor(index = null){
         super(...arguments);
         this.index = index || Random.intRange(0,Food.sprites.length-1);
         this.image = Food.sprites[this.index];
         this.x += this.randomX_;
         this.y += this.randomY_;
-        this.size = Random.range(.65,1.8);
+        this.size = Random.range(.8,2);
     }
     static spawnFood(i=40){
         var l  = [];
@@ -20,6 +20,6 @@ class Food extends Interactable{
     }
     onEnterFrame(dt){
         Interactable.prototype.onEnterFrame.call(this,dt);
-        if((this.size *= Food.foodShrinkRate)<.1)this.destroy();
+        if((this.size *= Food.foodShrinkRate)<.4)this.destroy();
     }
 }

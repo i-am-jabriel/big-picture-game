@@ -5,7 +5,7 @@ class Cloud extends Interactable{
         this.y = y || this.randomY_;
         this.rotation = Random.range(0, 360);
         this.speed = Random.range(0,0.4) * Math.pow(Math.random(),3);
-        this.size = Random.range(1,5) * Math.pow(Random.range(0.5,2.5),1.5);
+        this.size = Random.range(1.4,6) * Math.pow(Random.range(0.5,2.5),1.8);
         /*setTimeout(()=>this.destroy(),Random.range(15000,30000));*/
         this.image = Cloud.sprites.pick();
 

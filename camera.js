@@ -5,14 +5,14 @@ var spawn={
     _y:0
 };
 
-var cameraPadding = 0.98;
+var cameraPadding = .999;
 class Camera{
     constructor(){
-        this.x = 0;
-        this.y = 0;
+        this.onResize();
+        this.x = this.width*.5;
+        this.y = this.height*.5;
         this.levelingUp = false;
         this.scale = 1;
-        this.onResize();
         window.addEventListener('resize',x=>this.onResize());
     }
     onEnterFrame(){
@@ -40,7 +40,8 @@ class Camera{
         spawn._y=this.height*.5;
     }
     tryToLevelUp(){
-        var readyToLevelUp = Math.max(...interactables.map(x=>x.constructor.name=='Animal'?x.size:0))>=15;
+        var largest = interactables.reduce((a,c)=>c.constructor.name=='Animal'&&a.size<c.size?c:a,{size:0});
+        var readyToLevelUp = largest.size >=14;
         if(readyToLevelUp && !this.levelingUp){
             var i=interactables.length;
             while(i--)if(interactables[i].onScreen)new Particle('spark',interactables[i]);
@@ -53,11 +54,12 @@ class Camera{
                     var i=interactables.length;
                     var shrink = dt * 2.2 / shrinkTime;
                     var destroy = [];
+                    var scale = Math.max(shrink,largest.size*.012);
                     while(i--){
                         if((interactables[i].size -= Math.max(shrink,interactables[i].size*.012)) < 0.1)destroy.push(interactables[i]);
                     }
                     if(destroy.length>0) Interactable.destroyAll(destroy);
-                    this.scale += shrink * 4;
+                    this.scale += scale; /*shrink * 4;*/
                 },x=>this.levelingUp=null);
             },500)
         }
